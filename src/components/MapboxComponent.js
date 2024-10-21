@@ -97,7 +97,7 @@ const MapboxComponent = () => {
       source: "route-line",
       layout: {},
       paint: {
-        "line-color": "#888",
+        "line-color": "#f09990",
         "line-width": 4,
       },
     });
