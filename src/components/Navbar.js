@@ -27,7 +27,7 @@ function Navbar({ onLogout, onHomeClick, showHomeButton }) {
       <div className="navbar-center">
         {showHomeButton && (
           <button className="global-view-button" onClick={onHomeClick}>
-            Back to Global View
+            Global View
           </button>
         )}
       </div>
