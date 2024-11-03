@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getRoutes, calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
+import "../../css/MapboxComponent.css"; // Import the CSS file
 
 const MapboxComponent = ({ resetToTopLevelView }) => {
   const mapContainerRef = useRef(null);
@@ -24,7 +25,6 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
       newMap.addControl(new window.mapboxgl.NavigationControl());
       setMap(newMap);
 
-      // Only set resetToTopLevelView after map is initialized
       if (resetToTopLevelView) {
         resetToTopLevelView(() => goToGlobalView(newMap));
       }
@@ -51,15 +51,10 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
   const drawTopLevelMarkers = () => {
     routes.forEach((route, index) => {
       const center = calculateCenter(route.waypoints);
+
+      // Create the marker with a class for styling
       const markerElement = document.createElement("div");
-      markerElement.style.background = "#5c3b28";
-      markerElement.style.width = "30px";
-      markerElement.style.height = "30px";
-      markerElement.style.borderRadius = "50%";
-      markerElement.style.color = "white";
-      markerElement.style.display = "flex";
-      markerElement.style.alignItems = "center";
-      markerElement.style.justifyContent = "center";
+      markerElement.className = "top-level-marker";
       markerElement.textContent = index + 1;
 
       new window.mapboxgl.Marker({ element: markerElement })
@@ -96,15 +91,9 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
     });
 
     route.waypoints.forEach((waypoint, index) => {
+      // Create the waypoint marker with a class for styling
       const markerElement = document.createElement("div");
-      markerElement.style.background = "red";
-      markerElement.style.width = "20px";
-      markerElement.style.height = "20px";
-      markerElement.style.borderRadius = "50%";
-      markerElement.style.color = "white";
-      markerElement.style.display = "flex";
-      markerElement.style.alignItems = "center";
-      markerElement.style.justifyContent = "center";
+      markerElement.className = "waypoint-marker";
       markerElement.textContent = index + 1;
 
       const marker = new window.mapboxgl.Marker({ element: markerElement })
