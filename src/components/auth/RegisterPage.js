@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../css/auth/RegisterPage.css"; // Import the CSS file for styling
+import "../../css/auth/AuthPage.css"; // Import the CSS file for styling
 
 const baseURL = process.env.REACT_APP_PATHLESS_BASE_URL;
 
@@ -35,7 +35,7 @@ function RegisterPage() {
   return (
     <div className="register-container">
       <div className="register-box">
-        <h2>Register</h2>
+        <h2>Become a Pathless User!</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="email"

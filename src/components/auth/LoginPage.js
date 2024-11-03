@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../css/auth/LoginPage.css"; // Import the CSS file for styling
+import "../../css/auth/AuthPage.css"; // Import the CSS file for styling
 
 const baseURL = process.env.REACT_APP_PATHLESS_BASE_URL;
 

@@ -1,0 +1,102 @@
+/* Center the login/register container */
+.login-container, .register-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f1e6, #d3b8ae); /* Beige gradient */
+  }
+  
+  /* Styling for the login/register box */
+  .login-box, .register-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Styling for the heading */
+  .login-box h2, .register-box h2 {
+    margin-bottom: 24px;
+    color: #000000; /* Dark mahogany for text */
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Styling for input fields and select */
+  .login-input, .register-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #a3a3a3; /* Soft beige border */
+    border-radius: 5px;
+    font-size: 16px;
+    color: #000000; /* Dark mahogany text */
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    background-color: #ffffff; /* Very light beige background */
+    box-sizing: border-box;
+  }
+  
+  .login-input:focus, .register-input:focus {
+    border-color: #8b5e3c; /* Mahogany brown border on focus */
+  }
+  
+  /* Styling for textarea */
+  .register-textarea {
+    resize: none;
+    height: 80px;
+  }
+  
+  /* Styling for the login/register button */
+  .login-button, .register-button {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    background-color: #8b5e3c; /* Mahogany brown button */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s;
+    box-sizing: border-box;
+  }
+  
+  .login-button:hover, .register-button:hover {
+    background-color: #5c3b28; /* Darker mahogany on hover */
+  }
+  
+  .login-button:active, .register-button:active {
+    transform: scale(0.98);
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #a85d3b; /* Medium mahogany for error text */
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Register/Login link styling */
+  .register-link, .login-link {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #4d2c2c;
+  }
+  
+  .register-link a, .login-link a {
+    color: #8b5e3c; /* Mahogany brown for link text */
+    text-decoration: none;
+  }
+  
+  .register-link a:hover, .login-link a:hover {
+    text-decoration: underline;
+  }
+  
