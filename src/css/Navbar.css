@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #8b5e3c;
-    padding: 10px 20px;
+    padding: 7px 20px; /* Adjusted padding for thinner navbar */
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: sticky;
@@ -12,15 +12,24 @@
     z-index: 1000;
   }
   
-  /* Left section for navigation buttons */
+  /* Left section for hamburger menu and Filters button */
   .navbar-left {
     display: flex;
+    align-items: center;
     gap: 15px;
   }
   
-  /* Right section for logout button */
+  /* Center section for "Back to Global View" button */
+  .navbar-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Right section for Logout button */
   .navbar-right {
     display: flex;
+    align-items: center;
   }
   
   /* Navbar button styles */
@@ -39,7 +48,60 @@
     background: rgba(255, 255, 255, 0.2);
   }
   
+  /* Logout button styling in navbar */
   .logout-button {
+    background-color: #733f2b;
+    color: white;
+    font-size: 16px;
     font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .logout-button:hover {
+    background-color: #a85d3b;
+  }
+  
+  /* "Back to Global View" button styling (similar to Logout, not bold) */
+  .global-view-button {
+    background-color: #733f2b;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .global-view-button:hover {
+    background-color: #a85d3b;
+  }
+  
+  /* Hamburger Menu */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  
+  .hamburger:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .hamburger .bar {
+    width: 25px;
+    height: 2px;
+    background-color: white;
+    transition: background-color 0.3s ease;
   }
   

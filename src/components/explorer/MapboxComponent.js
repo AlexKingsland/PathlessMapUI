@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getRoutes, calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
-import "../../css/MapboxComponent.css"; // Import the CSS file
+import "../../css/MapboxComponent.css";
 
-const MapboxComponent = ({ resetToTopLevelView }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
   const [isGlobalView, setIsGlobalView] = useState(true);
@@ -25,6 +25,7 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
       newMap.addControl(new window.mapboxgl.NavigationControl());
       setMap(newMap);
 
+      // Only set resetToTopLevelView after map is initialized
       if (resetToTopLevelView) {
         resetToTopLevelView(() => goToGlobalView(newMap));
       }
@@ -91,7 +92,6 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
     });
 
     route.waypoints.forEach((waypoint, index) => {
-      // Create the waypoint marker with a class for styling
       const markerElement = document.createElement("div");
       markerElement.className = "waypoint-marker";
       markerElement.textContent = index + 1;
@@ -113,11 +113,13 @@ const MapboxComponent = ({ resetToTopLevelView }) => {
   const zoomIntoRoute = (index) => {
     setCurrentRouteIndex(index);
     setIsGlobalView(false);
+    toggleGlobalView(false); // Notify App.js that we're zoomed in
   };
 
   const goToGlobalView = (mapInstance = map) => {
     if (mapInstance) {
       setIsGlobalView(true);
+      toggleGlobalView(true); // Notify App.js that we're back in global view
       setCurrentRouteIndex(null);
       setSelectedWaypoint(null);
       mapInstance.flyTo({ center: [0, 20], zoom: 1.5 });

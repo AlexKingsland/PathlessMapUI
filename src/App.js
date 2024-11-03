@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [isGlobalView, setIsGlobalView] = useState(true); // Track global vs. zoomed-in view
   const goToTopLevelViewRef = useRef(null);
 
   const handleLogin = (token) => {
@@ -23,6 +24,11 @@ function App() {
     goToTopLevelViewRef.current = goToGlobalView;
   };
 
+  // Function to toggle the view state
+  const toggleGlobalView = (isGlobal) => {
+    setIsGlobalView(isGlobal);
+  };
+
   return (
     <Router>
       <div>
@@ -30,6 +36,7 @@ function App() {
           <Navbar
             onLogout={handleLogout}
             onHomeClick={() => goToTopLevelViewRef.current && goToTopLevelViewRef.current()}
+            showHomeButton={!isGlobalView} // Pass true only when zoomed in
           />
         )}
         <Routes>
@@ -39,7 +46,10 @@ function App() {
             path="/map"
             element={
               isAuthenticated ? (
-                <MapboxComponent resetToTopLevelView={setGoToTopLevelView} />
+                <MapboxComponent
+                  resetToTopLevelView={setGoToTopLevelView}
+                  toggleGlobalView={toggleGlobalView} // Pass down the toggle function
+                />
               ) : (
                 <Navigate to="/login" />
               )
