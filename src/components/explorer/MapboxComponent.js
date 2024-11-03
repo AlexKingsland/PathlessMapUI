@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getRoutes, calculateCenter } from "../waypoints"; // Import waypoints and helper
+import { getRoutes, calculateCenter } from "../../waypoints"; // Import waypoints and helper
 import WaypointDetailsPanel from "./WaypointDetailsPanel"; // Import the new WaypointDetailsPanel component
 
 const MapboxComponent = () => {
