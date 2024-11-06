@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/WaypointDetailsPanel.css"; // Import the CSS file
+import "../../css/map/WaypointDetailsPanel.css"; // Import the CSS file
 
 const WaypointDetailsPanel = ({ waypoint, onClose }) => {
   if (!waypoint) {

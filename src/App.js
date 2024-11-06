@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import MapboxComponent from "./components/explorer/MapboxComponent";
+import MapboxComponent from "./components/map/MapboxComponent";
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import Navbar from "./components/Navbar";

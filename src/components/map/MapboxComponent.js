@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getRoutes, calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
-import "../../css/MapboxComponent.css";
+import "../../css/map/MapboxComponent.css";
 
 const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   const mapContainerRef = useRef(null);
