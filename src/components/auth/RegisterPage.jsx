@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../css/auth/AuthPage.css"; // Import the CSS file for styling
+import "../../css/auth/AuthPage.css";
 
-const baseURL = process.env.REACT_APP_PATHLESS_BASE_URL;
+const baseURL = import.meta.env.VITE_PATHLESS_BASE_URL;
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ function RegisterPage() {
         name,
         bio,
       });
-      setError(""); // Clear any previous errors
+      setError("");
       navigate("/login"); // Redirect to login page only after successful registration
     } catch (err) {
       setError("Registration failed. Please try again.");

@@ -12,14 +12,12 @@ function Navbar({ onLogout, onHomeClick, showHomeButton }) {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        {/* Hamburger Menu Icon */}
         <div className="hamburger navbar-button" onClick={toggleMenu}>
           <span className="bar"></span>
           <span className="bar"></span>
           <span className="bar"></span>
         </div>
 
-        {/* Filters button */}
         <button className="navbar-button">Filters</button>
       </div>
 

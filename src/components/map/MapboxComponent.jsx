@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getRoutes, calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
 import "../../css/map/MapboxComponent.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   const mapContainerRef = useRef(null);
@@ -13,7 +14,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
 
   useEffect(() => {
     if (window.mapboxgl) {
-      window.mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+      window.mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
       const newMap = new window.mapboxgl.Map({
         container: mapContainerRef.current,

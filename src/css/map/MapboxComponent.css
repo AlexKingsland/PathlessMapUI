@@ -15,12 +15,12 @@
 
 /* Hover effect for top-level markers */
 .top-level-marker:hover {
-  background-color: #00026b; /* Darker shade of mahogany */
+  background-color: #00026b;
 }
 
 /* General marker styling for waypoint markers */
 .waypoint-marker {
-  background-color: red; /* Slightly brighter brown */
+  background-color: red;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -35,5 +35,5 @@
 
 /* Hover effect for waypoint markers */
 .waypoint-marker:hover {
-  background-color: #26ff00; /* Darker brown for waypoint markers */
+  background-color: #26ff00;
 }
