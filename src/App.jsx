@@ -4,6 +4,7 @@ import MapboxComponent from "./components/map/MapboxComponent";
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import Navbar from "./components/Navbar";
+import LandingPage from "./components/landing/LandingPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
@@ -40,6 +41,7 @@ function App() {
           />
         )}
         <Routes>
+          <Route path="/home" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
