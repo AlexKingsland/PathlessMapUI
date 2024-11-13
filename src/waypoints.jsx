@@ -1,6 +1,6 @@
 const routes = [
   {
-    country: "Hungary",
+    route_name: "Hungary",
     waypoints: [
       {
         name: "Parliament Building",
@@ -53,7 +53,7 @@ const routes = [
     ]
   },
   {
-    country: "Italy",
+    route_name: "Italy",
     waypoints: [
       {
         name: "Duomo di Milano",
@@ -106,7 +106,7 @@ const routes = [
     ]
   },
   {
-    country: "Switzerland",
+    route_name: "Switzerland",
     waypoints: [
       {
         name: "Federal Palace",
@@ -159,7 +159,7 @@ const routes = [
     ]
   },
   {
-    country: "France",
+    route_name: "France",
     waypoints: [
       {
         name: "Eiffel Tower",
@@ -212,7 +212,7 @@ const routes = [
     ]
   },
   {
-    country: "Thailand",
+    route_name: "Thailand",
     waypoints: [
       {
         name: "Grand Palace",
@@ -265,7 +265,7 @@ const routes = [
     ]
   },
   {
-    country: "Bolivia",
+    route_name: "Bolivia",
     waypoints: [
       {
         name: "Valley of the Moon",

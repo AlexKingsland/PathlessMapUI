@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, onHomeClick, showHomeButton }) {
+function Navbar({ onLogout, onHomeClick, showHomeButton, showBackToExploreButton, onBackToExplore, onBackToCreate }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -21,7 +20,7 @@ function Navbar({ onLogout, onHomeClick, showHomeButton }) {
         <button className="navbar-button">Filters</button>
       </div>
 
-      {/* Centered "Back to Global View" button */}
+      {/* Centered "Global View" button */}
       <div className="navbar-center">
         {showHomeButton && (
           <button className="global-view-button" onClick={onHomeClick}>
@@ -30,12 +29,25 @@ function Navbar({ onLogout, onHomeClick, showHomeButton }) {
         )}
       </div>
 
+      {/* Centered "Back to Explore" button */}
+      <div className="navbar-center">
+        {showBackToExploreButton && (
+          <button className="global-view-button" onClick={onBackToExplore}>
+            Back to Explore
+          </button>
+        )}
+      </div>
+
       <div className="navbar-right">
         <button className="navbar-button logout-button">Explore</button>
       </div>
 
-      {/* Side Panel */}
-      <SidePanel onLogout={onLogout} isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <SidePanel
+              onLogout={onLogout}
+              isMenuOpen={isMenuOpen} // Default state for the side panel
+              toggleMenu={toggleMenu}
+              onCreateMode={onBackToCreate} // Pass the function to switch to create mode
+            />
     </nav>
   );
 }
