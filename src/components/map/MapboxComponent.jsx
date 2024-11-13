@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getRoutes, calculateCenter } from "../../waypoints";
+import { calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
 import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import WaypointFormPanel from "./WaypointFormPanel"; // Import the new component
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
   const [isGlobalView, setIsGlobalView] = useState(true);
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
-  const routes = getRoutes();
 
   useEffect(() => {
     if (window.mapboxgl) {
@@ -26,7 +26,6 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
       newMap.addControl(new window.mapboxgl.NavigationControl());
       setMap(newMap);
 
-      // Only set resetToTopLevelView after map is initialized
       if (resetToTopLevelView) {
         resetToTopLevelView(() => goToGlobalView(newMap));
       }
@@ -38,11 +37,11 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
       clearMap();
       if (isGlobalView) {
         drawTopLevelMarkers();
-      } else if (currentRouteIndex !== null) {
+      } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
         drawRoute(routes[currentRouteIndex]);
       }
     }
-  }, [map, isGlobalView, currentRouteIndex]);
+  }, [map, isGlobalView, currentRouteIndex, routes]);
 
   const clearMap = () => {
     if (map.getLayer("route")) map.removeLayer("route");
@@ -51,10 +50,11 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   };
 
   const drawTopLevelMarkers = () => {
+    if (!routes || routes.length === 0) return;
+
     routes.forEach((route, index) => {
       const center = calculateCenter(route.waypoints);
 
-      // Create the marker with a class for styling
       const markerElement = document.createElement("div");
       markerElement.className = "top-level-marker";
       markerElement.textContent = index + 1;
@@ -68,6 +68,8 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   };
 
   const drawRoute = (route) => {
+    if (!route || !route.waypoints) return;
+
     const lineString = {
       type: "Feature",
       geometry: {
@@ -114,13 +116,13 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   const zoomIntoRoute = (index) => {
     setCurrentRouteIndex(index);
     setIsGlobalView(false);
-    toggleGlobalView(false); // Notify App.js that we're zoomed in
+    toggleGlobalView(false);
   };
 
   const goToGlobalView = (mapInstance = map) => {
     if (mapInstance) {
       setIsGlobalView(true);
-      toggleGlobalView(true); // Notify App.js that we're back in global view
+      toggleGlobalView(true);
       setCurrentRouteIndex(null);
       setSelectedWaypoint(null);
       mapInstance.flyTo({ center: [0, 20], zoom: 1.5 });
@@ -134,6 +136,12 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
         waypoint={selectedWaypoint}
         onClose={() => setSelectedWaypoint(null)}
       />
+      {isFormPanelVisible && (
+        <WaypointFormPanel
+          onAddWaypoint={addWaypointToUserRoutes} // Pass the function to add waypoints
+          onClose={() => setIsFormPanelVisible(false)}
+        />
+      )}
     </div>
   );
 };
