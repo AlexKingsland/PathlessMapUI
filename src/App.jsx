@@ -15,6 +15,7 @@ function App() {
   const [userRoutes, setUserRoutes] = useState([]); // State to hold user routes
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
   const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
+  const [createMapName, setCreateMapName] = useState(""); // Track map name
 
   useEffect(() => {
     // Simulate fetching explore routes using getRoutes (mock data)
@@ -55,7 +56,9 @@ function App() {
   };
 
   // Function to switch to create mode and open the form panel
-  const handleSwitchToCreateMode = () => {
+  const handleSwitchToCreateMode = (createMapName) => {
+    console.log("handleSwitchToCreateMode called with map name:", createMapName);
+    setCreateMapName(createMapName); // Set the map name
     setIsCreateMode(true);
     setIsFormPanelVisible(true); // Show the form panel
     setShowBackToExploreButton(true); // Show "Back to Explore" button
@@ -77,9 +80,10 @@ function App() {
               onLogout={handleLogout}
               onHomeClick={() => goToTopLevelViewRef.current && goToTopLevelViewRef.current()}
               showHomeButton={!isGlobalView} // Pass true only when zoomed in
-              showBackToExploreButton={showBackToExploreButton} // Pass the visibility state for "Back to Explore"
               onBackToExplore={handleSwitchToExploreMode} // Pass the function to switch to explore mode
               onBackToCreate={handleSwitchToCreateMode} // Pass the function to switch to create mode
+              isCreateMode={isCreateMode}
+              createMapName={createMapName} // Pass the map name to Navbar
             />
           </>
         )}

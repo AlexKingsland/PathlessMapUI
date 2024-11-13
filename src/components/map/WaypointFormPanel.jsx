@@ -18,7 +18,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
     latitude: "",
     longitude: "",
     tags: "",
-    times_of_day: "",
     price: ""
   });
   const [useGoogleSearch, setUseGoogleSearch] = useState(false);
@@ -62,8 +61,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
       ...currentWaypoint,
       latitude: parseFloat(currentWaypoint.latitude),
       longitude: parseFloat(currentWaypoint.longitude),
-      price: parseFloat(currentWaypoint.price),
-      times_of_day: currentWaypoint.times_of_day ? JSON.parse(currentWaypoint.times_of_day) : {}
+      price: parseFloat(currentWaypoint.price)
     });
     setCurrentWaypoint({
       title: "",
@@ -72,7 +70,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
       latitude: "",
       longitude: "",
       tags: "",
-      times_of_day: "",
       price: ""
     });
     setAddress("");
@@ -163,13 +160,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
             name="tags"
             placeholder="Tags (comma-separated)"
             value={currentWaypoint.tags}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="times_of_day"
-            placeholder='Times of Day (JSON format: {"morning": true})'
-            value={currentWaypoint.times_of_day}
             onChange={handleChange}
           />
           <input
