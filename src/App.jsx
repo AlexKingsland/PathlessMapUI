@@ -16,6 +16,7 @@ function App() {
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
   const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
   const [createMapName, setCreateMapName] = useState(""); // Track map name
+  const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
 
   useEffect(() => {
     // Simulate fetching explore routes using getRoutes (mock data)
@@ -42,19 +43,6 @@ function App() {
     setIsGlobalView(isGlobal);
   };
 
-  // Function to add a waypoint to userRoutes
-  const addWaypointToUserRoutes = (newWaypoint) => {
-    setUserRoutes((prevUserRoutes) => {
-      const updatedUserRoutes = [...prevUserRoutes];
-      if (updatedUserRoutes.length > 0) {
-        updatedUserRoutes[0].waypoints.push(newWaypoint);
-      } else {
-        updatedUserRoutes.push({ waypoints: [newWaypoint] });
-      }
-      return updatedUserRoutes;
-    });
-  };
-
   // Function to switch to create mode and open the form panel
   const handleSwitchToCreateMode = (createMapName) => {
     console.log("handleSwitchToCreateMode called with map name:", createMapName);
@@ -62,13 +50,52 @@ function App() {
     setIsCreateMode(true);
     setIsFormPanelVisible(true); // Show the form panel
     setShowBackToExploreButton(true); // Show "Back to Explore" button
+
+    // Create a new route with the given map name, empty description, and empty waypoints
+    setUserRoutes([{
+      title: createMapName,
+      description: "",
+      duration: "",
+      waypoints: []
+    }]);
+  };
+
+  // Function to add a waypoint to their route
+  const addWaypointToUserRoutes = () => {
+    setCreateMapWaypointIndex((prevIndex) => prevIndex + 1);
+  };
+
+  // Function to update a waypoint in the first route (index 0) by waypoint index
+  const handleUpdateWaypoint = (waypoint) => {
+    console.log("Updating waypoint index: ", createMapWaypointIndex);
+    setUserRoutes((prevRoutes) => {
+      const updatedRoutes = [...prevRoutes];
+      if (createMapWaypointIndex == updatedRoutes[0].waypoints.length) {
+        updatedRoutes[0].waypoints.push(waypoint);
+      } else if (updatedRoutes.length >= -1 && updatedRoutes[0].waypoints.length > createMapWaypointIndex) {
+        const route = updatedRoutes[0];
+        
+        // Update the waypoint at the given createMapWaypointIndex
+        route.waypoints[createMapWaypointIndex] = waypoint;
+
+        updatedRoutes[0] = route;
+        console.log(`Updated waypoint at index ${createMapWaypointIndex}:`, waypoint);
+        console.log("Updated Routes after waypoint update:", updatedRoutes);
+      } else {
+        console.error("Invalid index or route for updating waypoint.");
+      }
+      console.log("Updated Routes after adding waypoint:", updatedRoutes);
+      return updatedRoutes;
+    });
   };
 
   // Function to switch to explore mode and close the form panel
   const handleSwitchToExploreMode = () => {
+    setCreateMapWaypointIndex()
     setIsCreateMode(false);
     setIsFormPanelVisible(false); // Close the form panel
     setShowBackToExploreButton(false); // Hide "Back to Explore" button
+    goToTopLevelViewRef.current && goToTopLevelViewRef.current(); // Go back to global view
   };
 
   return (
@@ -101,6 +128,8 @@ function App() {
                   addWaypointToUserRoutes={addWaypointToUserRoutes} // Pass the function to add waypoints
                   isFormPanelVisible={isFormPanelVisible} // Pass form panel visibility state
                   setIsFormPanelVisible={setIsFormPanelVisible} // Pass setter for form panel visibility
+                  isCreateMode={isCreateMode}
+                  onUpdateWaypoint={handleUpdateWaypoint}
                 />
               ) : (
                 <Navigate to="/login" />

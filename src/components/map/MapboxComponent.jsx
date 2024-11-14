@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel"; // Import the new component
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
   const [isGlobalView, setIsGlobalView] = useState(true);
@@ -35,7 +35,12 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
   useEffect(() => {
     if (map) {
       clearMap();
-      if (isGlobalView) {
+      if (isCreateMode) {
+        setCurrentRouteIndex(0); // Set the current route index to 0 when in create mode
+        if (routes[0]) {
+          drawRoute(routes[0]); // In create mode there is only 1 route
+        }
+      } else if (isGlobalView) {
         drawTopLevelMarkers();
       } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
         drawRoute(routes[currentRouteIndex]);
@@ -67,8 +72,10 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
     });
   };
 
+  // this function is used to draw routes for both explore [n] and create [0] UI
   const drawRoute = (route) => {
-    if (!route || !route.waypoints) return;
+    if (!route || !route.waypoints || route.waypoints.length === 0) return;
+    console.log("Drawing route with waypoints:", route.waypoints); // Debug line
 
     const lineString = {
       type: "Feature",
@@ -131,7 +138,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
 
   return (
     <div>
-      <div ref={mapContainerRef} style={{ width: "100vw", height: "100vh" }} />
+      <div ref={mapContainerRef} style={{ width: "100vw", height: "calc(100vh - 60px)" }} />
       <WaypointDetailsPanel
         waypoint={selectedWaypoint}
         onClose={() => setSelectedWaypoint(null)}
@@ -139,6 +146,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
       {isFormPanelVisible && (
         <WaypointFormPanel
           onAddWaypoint={addWaypointToUserRoutes} // Pass the function to add waypoints
+          onUpdateWaypoint={onUpdateWaypoint} // Pass the function to update waypoints
           onClose={() => setIsFormPanelVisible(false)}
         />
       )}

@@ -1,23 +1,35 @@
 .waypoint-form-panel {
     position: fixed;
-    top: 54px; /* Relative to navbar */
+    top: 160px; /* Relative to navbar */
     right: 0;
     width: 300px;
-    height: 100%;
+    height: calc(60% - 60px);
     background-color: #fff;
     border-left: 1px solid #ccc;
     padding: 20px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .waypoint-form-panel.closed {
+    transform: translateX(100%); /* Slide out of view */
+  }
+  
+  .waypoint-form-panel.open {
+    transform: translateX(0); /* Slide into view */
   }
   
   .waypoint-form-panel input {
     display: block;
     width: 100%;
+    padding: 16px;
+    height: 27px; /* Specify the height */
     margin-bottom: 10px;
-    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
   }
   
   .waypoint-form-panel button {
@@ -56,10 +68,10 @@
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
+    box-sizing: border-box;
   }
   
   .waypoint-form-panel h3 {
@@ -93,25 +105,82 @@
   }
   
   .waypoint-form-panel .form-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
     margin-top: 20px;
+}
+
+.waypoint-form-panel button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1; /* Allow buttons to grow and fit the space */
+}
+
+.waypoint-form-panel .full-width-button {
+  width: 100%; /* Full width */
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px; /* Spacing between elements */
+  transition: background-color 0.3s;
+}
+
+.waypoint-form-panel .full-width-button:hover {
+  background-color: #0056b3;
+}
+
+  .waypoint-form-panel .button-group {
     display: flex;
     justify-content: space-between;
-  }
+    gap: 10px; /* Space between buttons */
+}
 
-  .waypoint-form-panel button {
-    margin-right: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 10px; /* Add spacing below the button */
-  }
+.waypoint-form-panel .button-group button {
+  margin-top: 10px; /* Adjust this value as needed */
+}
   
-  .waypoint-form-panel button:hover {
-    background-color: #0056b3;
-  }
+.waypoint-form-panel button:hover {
+  background-color: #0056b3;
+}
+
+.waypoint-form-panel button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.waypoint-form-panel .primary-button {
+  width: 100%; /* Full width for primary buttons */
+}
+
+.waypoint-form-panel .secondary-button {
+  background-color: #6c757d; /* Different color for secondary buttons */
+  color: #fff;
+}
+
+.waypoint-form-panel .secondary-button:hover {
+  background-color: #5a6268;
+}
+
+.next-button {
+  height: 40px; /* Set an aesthetic height */
+  margin-top: 10px; /* Add space between the button group and the Next button */
+  width: 100%; /* Full width */
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
   .autocomplete-dropdown {
     position: relative;
@@ -131,3 +200,65 @@
   .autocomplete-dropdown div:hover {
     background-color: #f0f0f0;
   }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    background: #fff !important; /* White background */
+    color: #6c757d !important; /* Grey "X" */
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px; /* Add some padding for a better click area */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0); /* Subtle shadow */
+}
+
+.close-button:hover {
+    background-color: #e0e0e0cb !important; /* Light grey background */
+    color: #4d4d4d; /* Slightly darker grey "X" */
+}
+  
+  .reopen-button {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #555;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20px;
+    height: 16px;
+  }
+  
+  .hamburger-icon .bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+  }
+  
+  .reopen-button:hover .bar {
+    background-color: #ddd;
+  }
+
+  .lat-lon-container {
+    display: flex;
+    gap: 10px; /* Space between the input fields */
+}
+
+.lat-lon-container input {
+    flex: 1; /* Make input fields take equal space */
+    border: 1px solid #ccc;
+}

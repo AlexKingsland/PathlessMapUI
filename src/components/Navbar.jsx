@@ -42,7 +42,12 @@ function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBack
       </div>
 
       <div className="navbar-right">
+      {isCreateMode && (
+        <button className="navbar-button logout-button">Publish</button>
+      )}
+      {!isCreateMode && (
         <button className="navbar-button logout-button">Explore</button>
+      )}
       </div>
 
       <SidePanel

@@ -5,7 +5,7 @@ import "../../css/map/WaypointFormPanel.css"; // Add custom styling here
 
 const libraries = ["places"]; // Specify the libraries to be loaded
 
-const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
+const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Use your API key stored as an environment variable
     libraries,
@@ -15,13 +15,15 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
     title: "",
     description: "",
     info: "",
-    latitude: "",
-    longitude: "",
+    lat: "",
+    lon: "",
     tags: "",
     price: ""
   });
   const [useGoogleSearch, setUseGoogleSearch] = useState(false);
   const [address, setAddress] = useState("");
+  const [isPlotted, setIsPlotted] = useState(false); // Track if "Plot" was clicked
+  const [isPanelOpen, setIsPanelOpen] = useState(true); // Track if the panel is open
 
   if (loadError) return <div>Error loading Google Maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -43,8 +45,8 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
           const location = results[0].geometry.location;
           setCurrentWaypoint((prev) => ({
             ...prev,
-            latitude: location.lat(),
-            longitude: location.lng(),
+            lat: location.lat(),
+            lon: location.lng(),
             title: value
           }));
         } else {
@@ -57,78 +59,116 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
   };
 
   const handleAddWaypoint = () => {
-    onAddWaypoint({
-      ...currentWaypoint,
-      latitude: parseFloat(currentWaypoint.latitude),
-      longitude: parseFloat(currentWaypoint.longitude),
-      price: parseFloat(currentWaypoint.price)
-    });
+    onAddWaypoint(); // Increment waypoint index or add to the route
     setCurrentWaypoint({
       title: "",
       description: "",
       info: "",
-      latitude: "",
-      longitude: "",
+      lat: "",
+      lon: "",
       tags: "",
       price: ""
     });
     setAddress("");
+    setIsPlotted(false); // Reset the plot status
+  };
+
+  const handleUpdateWaypoint = () => {
+    console.log("Current Waypoint being updated:", currentWaypoint);
+    onUpdateWaypoint({
+      ...currentWaypoint,
+      lat: parseFloat(currentWaypoint.lat),
+      lon: parseFloat(currentWaypoint.lon),
+      price: parseFloat(currentWaypoint.price)
+    });
+    setIsPlotted(true); // Mark as plotted
   };
 
   const handleToggleInputMode = () => {
     setUseGoogleSearch((prev) => !prev);
   };
 
-  return (
-    <div className="waypoint-form-panel">
-      <h3>Add Waypoint</h3>
-      <button onClick={handleToggleInputMode}>
-        {useGoogleSearch ? "Switch to Manual Input" : "Switch to Google Maps Input"}
-      </button>
+  const togglePanel = () => {
+    setIsPanelOpen((prev) => !prev);
+  };
 
-      {useGoogleSearch ? (
-        <PlacesAutocomplete
-          value={address}
-          onChange={setAddress}
-          onSelect={handleSelect}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
-              <input
-                {...getInputProps({
-                  placeholder: "Search for a location",
-                  className: "google-maps-search-input"
-                })}
-              />
-              <div className="autocomplete-dropdown">
-                {loading && <div>Loading...</div>}
-                {suggestions.map((suggestion) => {
-                  console.log(suggestion);
-                  const style = {
-                    backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
-                    cursor: "pointer",
-                    padding: "10px",
-                    borderBottom: "1px solid #ddd"
-                  };
-                  return (
-                    <div {...getSuggestionItemProps(suggestion, { style })}>
-                      {suggestion.description}
-                    </div>
-                  );
-                })}
+  // Determine if "Plot" button should be enabled
+  const isPlotButtonDisabled = !currentWaypoint.lat || !currentWaypoint.lon;
+
+  return (
+    <div>
+      <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
+        <button className="close-button" onClick={togglePanel}>X</button>
+        <h3>Add Waypoint</h3>
+
+        <button className="full-width-button" onClick={handleToggleInputMode}>
+            {useGoogleSearch ? "Manual Input" : "Google Maps Input"}
+        </button>
+
+        {useGoogleSearch ? (
+          <PlacesAutocomplete
+            value={address}
+            onChange={setAddress}
+            onSelect={handleSelect}
+          >
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+              <div>
+                <input
+                  {...getInputProps({
+                    placeholder: "Search for a location",
+                    className: "google-maps-search-input"
+                  })}
+                />
+                <div className="autocomplete-dropdown">
+                  {loading && <div>Loading...</div>}
+                  {suggestions.map((suggestion) => {
+                    const style = {
+                      backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
+                      cursor: "pointer",
+                      padding: "10px",
+                      borderBottom: "1px solid #ddd"
+                    };
+                    return (
+                      <div {...getSuggestionItemProps(suggestion, { style })}>
+                        {suggestion.description}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+            )}
+          </PlacesAutocomplete>
+        ) : (
+          <div>
+            <input
+              type="text"
+              name="title"
+              placeholder="Waypoint Title"
+              value={currentWaypoint.title}
+              onChange={handleChange}
+            />
+            {/* Latitude and Longitude input fields in a row */}
+            <div className="lat-lon-container">
+              <input
+                  type="number"
+                  name="lat"
+                  placeholder="Latitude"
+                  value={currentWaypoint.lat}
+                  onChange={handleChange}
+              />
+              <input
+                  type="number"
+                  name="lon"
+                  placeholder="Longitude"
+                  value={currentWaypoint.lon}
+                  onChange={handleChange}
+              />
             </div>
-          )}
-        </PlacesAutocomplete>
-      ) : (
+          </div>
+        )}
+
+        {/* Common fields that stay visible */}
         <div>
-          <input
-            type="text"
-            name="title"
-            placeholder="Waypoint Title"
-            value={currentWaypoint.title}
-            onChange={handleChange}
-          />
           <textarea
             name="description"
             placeholder="Description"
@@ -139,20 +179,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
             name="info"
             placeholder="Additional Info"
             value={currentWaypoint.info}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="latitude"
-            placeholder="Latitude"
-            value={currentWaypoint.latitude}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="longitude"
-            placeholder="Longitude"
-            value={currentWaypoint.longitude}
             onChange={handleChange}
           />
           <input
@@ -171,11 +197,28 @@ const WaypointFormPanel = ({ onAddWaypoint, onCreateMap, onClose }) => {
             onChange={handleChange}
           />
         </div>
-      )}
 
-      <button onClick={handleAddWaypoint}>Next Waypoint</button>
-      <button onClick={onCreateMap}>Done</button>
-      <button onClick={onClose}>Close</button>
+        {/* Button group for secondary actions */}
+        <div className="button-group">
+            <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
+                Plot
+            </button>
+        </div>
+
+        {/* Full-width primary action button */}
+        <button className="primary-button next-button" onClick={handleAddWaypoint} disabled={!isPlotted}>
+            Next
+        </button>
+      </div>
+      {!isPanelOpen && (
+        <button className="reopen-button" onClick={togglePanel}>
+          <div className="hamburger-icon">
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </div>
+        </button>
+      )}
     </div>
   );
 };
