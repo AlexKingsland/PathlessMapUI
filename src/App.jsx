@@ -15,6 +15,7 @@ function App() {
   const [userRoutes, setUserRoutes] = useState([]); // State to hold user routes
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
   const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
+  const [selectedWaypoint, setSelectedWaypoint] = useState(null);
   const [createMapName, setCreateMapName] = useState(""); // Track map name
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
 
@@ -59,6 +60,7 @@ function App() {
     setIsCreateMode(true);
     setIsFormPanelVisible(true); // Show the form panel
     setShowBackToExploreButton(true); // Show "Back to Explore" button
+    setSelectedWaypoint(null);
 
     // Create a new route with the given map name, empty description, and empty waypoints
     setUserRoutes([{
@@ -126,6 +128,7 @@ function App() {
     setCreateMapWaypointIndex()
     setIsCreateMode(false);
     setIsFormPanelVisible(false); // Close the form panel
+    setSelectedWaypoint(null);
     setShowBackToExploreButton(false); // Hide "Back to Explore" button
     goToTopLevelViewRef.current && goToTopLevelViewRef.current(); // Go back to global view
   };
@@ -163,6 +166,8 @@ function App() {
                   setIsFormPanelVisible={setIsFormPanelVisible} // Pass setter for form panel visibility
                   isCreateMode={isCreateMode}
                   onUpdateWaypoint={handleUpdateWaypoint}
+                  selectedWaypoint={selectedWaypoint}
+                  setSelectedWaypoint={setSelectedWaypoint}
                 />
               ) : (
                 <Navigate to="/login" />

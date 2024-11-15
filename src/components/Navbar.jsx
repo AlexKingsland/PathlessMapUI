@@ -31,7 +31,7 @@ function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBack
 
       {/* Centered "Global View" button */}
       <div className="navbar-center">
-        {showHomeButton && (
+        {showHomeButton && !isCreateMode && (
           <button className="global-view-button" onClick={onHomeClick}>
             Global View
           </button>
