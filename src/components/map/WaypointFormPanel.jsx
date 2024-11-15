@@ -121,9 +121,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
                 />
                 <div className="autocomplete-dropdown">
                   {loading && <div>Loading...</div>}
-                  {console.log('Suggestions:', suggestions)}
                   {suggestions.map((suggestion) => {
-                    console.log(`Rendering suggestion:`, suggestion.description);
                     const style = {
                       backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
                       cursor: "pointer",
