@@ -365,7 +365,6 @@ const fetchRoutesFromApi = async () => {
 // Exported function that decides whether to return mock data or call the API
 export const getRoutes = async () => {
   var runtimeMode = RUNTIME_MODE || 'test';
-  runtimeMode = 'live';
   if (runtimeMode === 'test') {
     return routes; // Return mock data
   } else if (runtimeMode === 'live') {
