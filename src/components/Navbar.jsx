@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName }) {
+function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   console.log("Navbar received createMapName:", createMapName); // Add this line for debugging
@@ -43,7 +43,7 @@ function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBack
 
       <div className="navbar-right">
       {isCreateMode && (
-        <button className="navbar-button logout-button">Publish</button>
+        <button className="navbar-button logout-button" onClick={onPublish}>Publish</button>
       )}
       {!isCreateMode && (
         <button className="navbar-button logout-button">Explore</button>

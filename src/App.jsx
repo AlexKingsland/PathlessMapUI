@@ -19,9 +19,18 @@ function App() {
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
 
   useEffect(() => {
-    // Simulate fetching explore routes using getRoutes (mock data)
-    const fetchedExploreRoutes = getRoutes();
-    setExploreRoutes(fetchedExploreRoutes);
+    const fetchRoutes = async () => {
+      try {
+        console.log("Fetching routes...");
+        const fetchedExploreRoutes = await getRoutes(); // Await the async function
+        console.log("Fetched routes:", fetchedExploreRoutes);
+        setExploreRoutes(fetchedExploreRoutes);
+      } catch (error) {
+        console.error("Error fetching routes:", error);
+      }
+    };
+  
+    fetchRoutes(); // Call the async function
   }, []);
 
   const handleLogin = (token) => {
@@ -89,6 +98,29 @@ function App() {
     });
   };
 
+  const handlePublish = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_PATHLESS_BASE_URL}maps/create_with_waypoints`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(userRoutes[0]), // Send the entire route object
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create map and waypoints');
+      }
+  
+      alert('Map and waypoints published successfully!');
+      handleSwitchToExploreMode(); // Switch to explore mode after publishing
+    } catch (error) {
+      console.error('Error publishing map and waypoints:', error);
+      alert('Failed to publish map and waypoints.');
+    }
+  };
+
   // Function to switch to explore mode and close the form panel
   const handleSwitchToExploreMode = () => {
     setCreateMapWaypointIndex()
@@ -111,6 +143,7 @@ function App() {
               onBackToCreate={handleSwitchToCreateMode} // Pass the function to switch to create mode
               isCreateMode={isCreateMode}
               createMapName={createMapName} // Pass the map name to Navbar
+              onPublish={handlePublish} // Pass the function to publish the map
             />
           </>
         )}

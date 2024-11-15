@@ -65,7 +65,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
       markerElement.textContent = index + 1;
 
       new window.mapboxgl.Marker({ element: markerElement })
-        .setLngLat([center.lon, center.lat])
+        .setLngLat([center.longitude, center.latitude])
         .addTo(map)
         .getElement()
         .addEventListener("click", () => zoomIntoRoute(index));
@@ -81,7 +81,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
       type: "Feature",
       geometry: {
         type: "LineString",
-        coordinates: route.waypoints.map((wp) => [wp.lon, wp.lat]),
+        coordinates: route.waypoints.map((wp) => [wp.longitude, wp.latitude]),
       },
     };
 
@@ -107,7 +107,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
       markerElement.textContent = index + 1;
 
       const marker = new window.mapboxgl.Marker({ element: markerElement })
-        .setLngLat([waypoint.lon, waypoint.lat])
+        .setLngLat([waypoint.longitude, waypoint.latitude])
         .addTo(map);
 
       marker.getElement().addEventListener("click", () => {
@@ -116,7 +116,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
     });
 
     const bounds = new window.mapboxgl.LngLatBounds();
-    route.waypoints.forEach((wp) => bounds.extend([wp.lon, wp.lat]));
+    route.waypoints.forEach((wp) => bounds.extend([wp.longitude, wp.latitude]));
     map.fitBounds(bounds, { padding: 50 });
   };
 

@@ -15,8 +15,8 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
     title: "",
     description: "",
     info: "",
-    lat: "",
-    lon: "",
+    latitude: "",
+    longitude: "",
     tags: "",
     price: ""
   });
@@ -45,8 +45,8 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
           const location = results[0].geometry.location;
           setCurrentWaypoint((prev) => ({
             ...prev,
-            lat: location.lat(),
-            lon: location.lng(),
+            latitude: location.lat(),
+            longitude: location.lng(),
             title: value
           }));
         } else {
@@ -64,8 +64,8 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
       title: "",
       description: "",
       info: "",
-      lat: "",
-      lon: "",
+      latitude: "",
+      longitude: "",
       tags: "",
       price: ""
     });
@@ -77,8 +77,8 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
     console.log("Current Waypoint being updated:", currentWaypoint);
     onUpdateWaypoint({
       ...currentWaypoint,
-      lat: parseFloat(currentWaypoint.lat),
-      lon: parseFloat(currentWaypoint.lon),
+      latitude: parseFloat(currentWaypoint.latitude),
+      longitude: parseFloat(currentWaypoint.longitude),
       price: parseFloat(currentWaypoint.price)
     });
     setIsPlotted(true); // Mark as plotted
@@ -93,7 +93,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
   };
 
   // Determine if "Plot" button should be enabled
-  const isPlotButtonDisabled = !currentWaypoint.lat || !currentWaypoint.lon;
+  const isPlotButtonDisabled = !currentWaypoint.latitude || !currentWaypoint.longitude;
 
   return (
     <div>
@@ -153,14 +153,14 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
                   type="number"
                   name="lat"
                   placeholder="Latitude"
-                  value={currentWaypoint.lat}
+                  value={currentWaypoint.latitude}
                   onChange={handleChange}
               />
               <input
                   type="number"
                   name="lon"
                   placeholder="Longitude"
-                  value={currentWaypoint.lon}
+                  value={currentWaypoint.longitude}
                   onChange={handleChange}
               />
             </div>
