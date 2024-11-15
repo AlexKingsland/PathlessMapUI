@@ -123,7 +123,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
                   {loading && <div>Loading...</div>}
                   {console.log('Suggestions:', suggestions)}
                   {suggestions.map((suggestion) => {
-                    console.log(`Rendering suggestion ${index}:`, suggestion.description);
+                    console.log(`Rendering suggestion:`, suggestion.description);
                     const style = {
                       backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
                       cursor: "pointer",
