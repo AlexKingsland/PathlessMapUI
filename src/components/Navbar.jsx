@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish }) {
+function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, selectedWaypoint, currentRoute }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   console.log("Navbar received createMapName:", createMapName); // Add this line for debugging
@@ -13,7 +13,7 @@ function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBack
   return (
     <nav className="navbar">
       <div className="navbar-left">
-      {isCreateMode ? (
+      {(isCreateMode || showHomeButton) ? (
         <button className="global-view-button" onClick={onBackToExplore}>
           Back to Explore
         </button>
@@ -32,12 +32,10 @@ function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBack
       {/* Centered "Global View" button */}
       <div className="navbar-center">
         {showHomeButton && !isCreateMode && (
-          <button className="global-view-button" onClick={onHomeClick}>
-            Global View
-          </button>
+          <b className="map-name-display">{currentRoute.title}</b>
         )}
         {isCreateMode && (
-          <span className="map-name-display">{createMapName}</span>
+          <b className="map-name-display">{createMapName}</b>
         )}
       </div>
 

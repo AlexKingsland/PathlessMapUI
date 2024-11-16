@@ -18,6 +18,7 @@ function App() {
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
   const [createMapName, setCreateMapName] = useState(""); // Track map name
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
+  const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -147,6 +148,8 @@ function App() {
               isCreateMode={isCreateMode}
               createMapName={createMapName} // Pass the map name to Navbar
               onPublish={handlePublish} // Pass the function to publish the map
+              selectedWaypoint={selectedWaypoint}
+              currentRoute={exploreRoutes[currentRouteIndex]}
             />
           </>
         )}
@@ -168,6 +171,8 @@ function App() {
                   onUpdateWaypoint={handleUpdateWaypoint}
                   selectedWaypoint={selectedWaypoint}
                   setSelectedWaypoint={setSelectedWaypoint}
+                  setCurrentRouteIndex={setCurrentRouteIndex}
+                  currentRouteIndex={currentRouteIndex}
                 />
               ) : (
                 <Navigate to="/login" />

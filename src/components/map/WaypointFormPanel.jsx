@@ -47,7 +47,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
             ...prev,
             latitude: location.lat(),
             longitude: location.lng(),
-            title: value
+            title: value.split(",")[0]
           }));
         } else {
           console.error("Geocode was not successful:", status);

@@ -5,13 +5,12 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel"; // Import the new component
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
   const [isGlobalView, setIsGlobalView] = useState(true);
-  const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   
-
+  
   useEffect(() => {
     if (window.mapboxgl) {
       window.mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
