@@ -13,7 +13,32 @@
   z-index: 900;
   transition: transform 0.3s ease;
   transform: translateX(-100%); /* Hidden off-screen by default */
+  overflow-y: auto; /* Add vertical scroll when content overflows */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
+
+/* Ensure padding and margin do not contribute to width overflow */
+.side-pane * {
+  box-sizing: border-box;
+}
+
+/* Keep the buttons from overflowing the pane */
+.side-pane-button,
+.create-map-button,
+.map-name-input {
+  max-width: 100%; /* Prevent the elements from exceeding the pane width */
+}
+
+/* Optional: Hide scrollbars (only visible when scrolling) */
+.side-pane::-webkit-scrollbar {
+  width: 6px; /* Adjust the width of the scrollbar */
+}
+
+.side-pane::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Color of the scrollbar */
+  border-radius: 10px;
+}
+
 
 .side-pane.open {
   transform: translateX(0); /* Slide in when open */

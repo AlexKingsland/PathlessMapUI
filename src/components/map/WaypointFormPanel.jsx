@@ -20,7 +20,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
     tags: "",
     price: ""
   });
-  const [useGoogleSearch, setUseGoogleSearch] = useState(false);
+  const [useGoogleSearch, setUseGoogleSearch] = useState(true);
   const [address, setAddress] = useState("");
   const [isPlotted, setIsPlotted] = useState(false); // Track if "Plot" was clicked
   const [isPanelOpen, setIsPanelOpen] = useState(true); // Track if the panel is open

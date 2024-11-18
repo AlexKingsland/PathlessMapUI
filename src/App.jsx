@@ -21,19 +21,42 @@ function App() {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
 
   useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        console.log("Fetching routes...");
-        const fetchedExploreRoutes = await getRoutes(); // Await the async function
-        console.log("Fetched routes:", fetchedExploreRoutes);
-        setExploreRoutes(fetchedExploreRoutes);
-      } catch (error) {
-        console.error("Error fetching routes:", error);
+    // Check if routes are already in localStorage
+    const storedRoutes = localStorage.getItem('exploreRoutes');
+
+    if (storedRoutes) {
+      const parsedRoutes = JSON.parse(storedRoutes);
+      if (parsedRoutes.length > 0) {
+        // If routes exist and have elements, set them
+        console.log("Stored routes found:", parsedRoutes);
+        setExploreRoutes(parsedRoutes);
+      } else {
+        // If parsedRoutes is an empty array, call fetchRoutes
+        fetchRoutes();
       }
-    };
-  
-    fetchRoutes(); // Call the async function
+    } else {
+      // If not, call fetchRoutes to load them
+      fetchRoutes();
+    }
   }, []);
+
+  const fetchRoutes = async () => {
+    try {
+      console.log("Fetching routes...");
+      const fetchedExploreRoutes = await getRoutes(); // Await the async function
+      console.log("Fetched routes:", fetchedExploreRoutes);
+      setExploreRoutes(fetchedExploreRoutes);
+      // Save the fetched routes to localStorage for future use
+      localStorage.setItem('exploreRoutes', JSON.stringify(fetchedExploreRoutes));
+    } catch (error) {
+      console.error("Error fetching routes:", error);
+    }
+  };
+
+  const handleExplore = () => {
+    localStorage.removeItem('exploreRoutes');; // Clear storage
+    fetchRoutes(); // Trigger fetching routes
+  };
 
   const handleLogin = (token) => {
     localStorage.setItem("token", token);
@@ -150,6 +173,7 @@ function App() {
               onPublish={handlePublish} // Pass the function to publish the map
               selectedWaypoint={selectedWaypoint}
               currentRoute={exploreRoutes[currentRouteIndex]}
+              onExplore={handleExplore}
             />
           </>
         )}

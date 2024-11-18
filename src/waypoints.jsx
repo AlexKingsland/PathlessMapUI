@@ -342,7 +342,10 @@ export const calculateCenter = (waypoints) => {
 
 const fetchRoutesFromApi = async () => {
   try {
-    const response = await fetch(`${PATHLESS_BASE_URL}maps/get_all_maps_with_waypoints`, {
+    const max_size = 5;
+    const tags = []; // Add relevant tags if needed
+    const query = `?max_size=${max_size}&tags=${encodeURIComponent(JSON.stringify(tags))}`;
+    const response = await fetch(`${PATHLESS_BASE_URL}maps/get_filtered_maps_with_waypoints${query}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
