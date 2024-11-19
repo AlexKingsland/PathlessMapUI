@@ -20,6 +20,7 @@ function App() {
   const [createMapName, setCreateMapName] = useState(""); // Track map name
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
+  const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -34,7 +35,20 @@ function App() {
   }, []);
 
   const handleExplore = () => {
-    setCurrentRouteIndex(Math.floor(Math.random() * (exploreRoutes.length - 1)) + 1);
+    setCurrentRouteIndex(Math.floor(Math.random() * exploreRoutes.length));
+    setIsGlobalView(false);
+  };
+
+  const handleHoverRoute = (index) => {
+    setHighlightedRouteIndex(index);
+  };
+
+  const handleLeaveRoute = () => {
+    setHighlightedRouteIndex(null);
+  };
+
+  const handleSelectRoute = (index) => {
+    setCurrentRouteIndex(index);
     setIsGlobalView(false);
   };
 
@@ -59,7 +73,6 @@ function App() {
 
   // Function to switch to create mode and open the form panel
   const handleSwitchToCreateMode = (createMapName) => {
-    console.log("handleSwitchToCreateMode called with map name:", createMapName);
     setCreateMapName(createMapName); // Set the map name
     setIsCreateMode(true);
     setIsFormPanelVisible(true); // Show the form panel
@@ -82,10 +95,9 @@ function App() {
 
   // Function to update a waypoint in the first route (index 0) by waypoint index
   const handleUpdateWaypoint = (waypoint) => {
-    console.log("Updating waypoint index: ", createMapWaypointIndex);
     setUserRoutes((prevRoutes) => {
       const updatedRoutes = [...prevRoutes];
-      if (createMapWaypointIndex == updatedRoutes[0].waypoints.length) {
+      if (createMapWaypointIndex === updatedRoutes[0].waypoints.length) {
         updatedRoutes[0].waypoints.push(waypoint);
       } else if (updatedRoutes.length >= -1 && updatedRoutes[0].waypoints.length > createMapWaypointIndex) {
         const route = updatedRoutes[0];
@@ -95,7 +107,6 @@ function App() {
 
         updatedRoutes[0] = route;
         console.log(`Updated waypoint at index ${createMapWaypointIndex}:`, waypoint);
-        console.log("Updated Routes after waypoint update:", updatedRoutes);
       } else {
         console.error("Invalid index or route for updating waypoint.");
       }
@@ -129,7 +140,7 @@ function App() {
 
   // Function to switch to explore mode and close the form panel
   const handleSwitchToExploreMode = () => {
-    setCreateMapWaypointIndex()
+    setCreateMapWaypointIndex();
     setIsCreateMode(false);
     setIsFormPanelVisible(false); // Close the form panel
     setSelectedWaypoint(null);
@@ -145,18 +156,24 @@ function App() {
             <Navbar
               onLogout={handleLogout}
               onHomeClick={() => goToTopLevelViewRef.current && goToTopLevelViewRef.current()}
-              showHomeButton={!isGlobalView} // Pass true only when zoomed in
-              onBackToExplore={handleSwitchToExploreMode} // Pass the function to switch to explore mode
-              onBackToCreate={handleSwitchToCreateMode} // Pass the function to switch to create mode
+              showHomeButton={!isGlobalView}
+              onBackToExplore={handleSwitchToExploreMode}
+              onBackToCreate={handleSwitchToCreateMode}
               isCreateMode={isCreateMode}
-              createMapName={createMapName} // Pass the map name to Navbar
-              onPublish={handlePublish} // Pass the function to publish the map
+              createMapName={createMapName}
+              onPublish={handlePublish}
               selectedWaypoint={selectedWaypoint}
               currentRoute={exploreRoutes[currentRouteIndex]}
               onExplore={handleExplore}
             />
-            {/* Render RouteOverviewPanel if not in create mode and in global view */}
-            {!isCreateMode && isGlobalView && <RouteOverviewPanel routes={exploreRoutes} />}
+            {!isCreateMode && isGlobalView && (
+              <RouteOverviewPanel
+                routes={exploreRoutes}
+                onHoverRoute={handleHoverRoute}
+                onLeaveRoute={handleLeaveRoute}
+                onClickRoute={handleSelectRoute}
+              />
+            )}
           </>
         )}
         <Routes>
@@ -167,19 +184,20 @@ function App() {
             element={
               isAuthenticated ? (
                 <MapboxComponent
-                  routes={isCreateMode ? userRoutes : exploreRoutes} // Switch between user and explore routes
+                  routes={isCreateMode ? userRoutes : exploreRoutes}
                   resetToTopLevelView={setGoToTopLevelView}
-                  toggleGlobalView={toggleGlobalView} // Pass down the toggle function
-                  isGlobalView={isGlobalView} // Pass the global view state
-                  addWaypointToUserRoutes={addWaypointToUserRoutes} // Pass the function to add waypoints
-                  isFormPanelVisible={isFormPanelVisible} // Pass form panel visibility state
-                  setIsFormPanelVisible={setIsFormPanelVisible} // Pass setter for form panel visibility
+                  toggleGlobalView={toggleGlobalView}
+                  isGlobalView={isGlobalView}
+                  addWaypointToUserRoutes={addWaypointToUserRoutes}
+                  isFormPanelVisible={isFormPanelVisible}
+                  setIsFormPanelVisible={setIsFormPanelVisible}
                   isCreateMode={isCreateMode}
                   onUpdateWaypoint={handleUpdateWaypoint}
                   selectedWaypoint={selectedWaypoint}
                   setSelectedWaypoint={setSelectedWaypoint}
                   setCurrentRouteIndex={setCurrentRouteIndex}
                   currentRouteIndex={currentRouteIndex}
+                  highlightedRouteIndex={highlightedRouteIndex} // Pass for map highlighting
                 />
               ) : (
                 <Navigate to="/login" />

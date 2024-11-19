@@ -21,6 +21,12 @@
     display: flex;
     flex-direction: column;
   }
+
+  .route-box:hover {
+    background-color: #f0e6e6; /* Light reddish or mahogany tint */
+    transform: translateY(-3px); /* Subtle lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+}
   
   .route-title {
     font-size: 18px;

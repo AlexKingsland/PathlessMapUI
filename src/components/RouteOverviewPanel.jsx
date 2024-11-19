@@ -1,15 +1,20 @@
-import React from "react";
-import "../css/RouteOverviewPanel.css"; // Import the CSS file
+import React from 'react';
+import '../css/RouteOverviewPanel.css';
 
-const RouteOverviewPanel = ({ routes }) => {
+const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }) => {
   return (
     <div className="route-overview-panel">
       {routes.map((route, index) => (
-        <div className="route-box" key={index}>
-          <h3 className="route-title">{route.title}</h3>
+        <div
+          key={index}
+          className="route-box"
+          onMouseEnter={() => onHoverRoute(index)}
+          onMouseLeave={onLeaveRoute(index)}
+          onClick={() => onClickRoute(index)}
+        >
+          <div className="route-title">{route.title}</div>
           <div className="route-content">
             <div className="route-image-placeholder">
-              {/* Placeholder image, replace with route.image eventually */}
               <img
                 src="https://via.placeholder.com/100"
                 alt="Route placeholder"
