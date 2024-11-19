@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import MapboxComponent from "./components/map/MapboxComponent";
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
+import RouteOverviewPanel from "./components/RouteOverviewPanel";
 import Navbar from "./components/Navbar";
 import { getRoutes } from "./waypoints"; // Import getRoutes function
 
@@ -21,41 +22,20 @@ function App() {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
 
   useEffect(() => {
-    // Check if routes are already in localStorage
-    const storedRoutes = localStorage.getItem('exploreRoutes');
-
-    if (storedRoutes) {
-      const parsedRoutes = JSON.parse(storedRoutes);
-      if (parsedRoutes.length > 0) {
-        // If routes exist and have elements, set them
-        console.log("Stored routes found:", parsedRoutes);
-        setExploreRoutes(parsedRoutes);
-      } else {
-        // If parsedRoutes is an empty array, call fetchRoutes
-        fetchRoutes();
+    const fetchRoutes = async () => {
+      try {
+        const fetchedExploreRoutes = await getRoutes(); // Await the async function
+        setExploreRoutes(fetchedExploreRoutes);
+      } catch (error) {
+        console.error("Error fetching routes:", error);
       }
-    } else {
-      // If not, call fetchRoutes to load them
-      fetchRoutes();
-    }
+    };
+    fetchRoutes();
   }, []);
 
-  const fetchRoutes = async () => {
-    try {
-      console.log("Fetching routes...");
-      const fetchedExploreRoutes = await getRoutes(); // Await the async function
-      console.log("Fetched routes:", fetchedExploreRoutes);
-      setExploreRoutes(fetchedExploreRoutes);
-      // Save the fetched routes to localStorage for future use
-      localStorage.setItem('exploreRoutes', JSON.stringify(fetchedExploreRoutes));
-    } catch (error) {
-      console.error("Error fetching routes:", error);
-    }
-  };
-
   const handleExplore = () => {
-    localStorage.removeItem('exploreRoutes');; // Clear storage
-    fetchRoutes(); // Trigger fetching routes
+    setCurrentRouteIndex(Math.floor(Math.random() * (exploreRoutes.length - 1)) + 1);
+    setIsGlobalView(false);
   };
 
   const handleLogin = (token) => {
@@ -175,6 +155,8 @@ function App() {
               currentRoute={exploreRoutes[currentRouteIndex]}
               onExplore={handleExplore}
             />
+            {/* Render RouteOverviewPanel if not in create mode and in global view */}
+            {!isCreateMode && isGlobalView && <RouteOverviewPanel routes={exploreRoutes} />}
           </>
         )}
         <Routes>
@@ -188,6 +170,7 @@ function App() {
                   routes={isCreateMode ? userRoutes : exploreRoutes} // Switch between user and explore routes
                   resetToTopLevelView={setGoToTopLevelView}
                   toggleGlobalView={toggleGlobalView} // Pass down the toggle function
+                  isGlobalView={isGlobalView} // Pass the global view state
                   addWaypointToUserRoutes={addWaypointToUserRoutes} // Pass the function to add waypoints
                   isFormPanelVisible={isFormPanelVisible} // Pass form panel visibility state
                   setIsFormPanelVisible={setIsFormPanelVisible} // Pass setter for form panel visibility
