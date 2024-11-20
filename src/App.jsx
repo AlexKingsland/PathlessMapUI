@@ -24,6 +24,7 @@ function App() {
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
+  const markerRefs = useRef({});
 
   useEffect(() => {
     fetchRoutes();
@@ -201,6 +202,7 @@ function App() {
                 onHoverRoute={index => handleHoverRoute(index)}
                 onLeaveRoute={() => handleLeaveRoute()}
                 onClickRoute={handleSelectRoute}
+                markerRefs={markerRefs}
               />
             )}
           </>
@@ -233,6 +235,7 @@ function App() {
                   map={map}
                   setMap={setMap}
                   resetHighlightedMarkers={resetHighlightedMarkers}
+                  markerRefs={markerRefs}
                 />
               ) : (
                 <Navigate to="/login" />

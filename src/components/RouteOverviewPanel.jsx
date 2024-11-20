@@ -1,7 +1,21 @@
 import React from "react";
 import "../css/RouteOverviewPanel.css";
 
-const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }) => {
+const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute, markerRefs }) => {
+  const handleBoxHover = (index) => {
+    const markerElement = markerRefs.current[index];
+    if (markerElement) {
+      markerElement.classList.add("hovered-top-level-marker");
+    }
+  };
+  
+  const handleBoxLeave = (index) => {
+    const markerElement = markerRefs.current[index];
+    if (markerElement) {
+      markerElement.classList.remove("hovered-top-level-marker");
+    }
+  };
+
   return (
     <div className="route-overview-panel">
       {routes.length === 0 ? (
@@ -14,12 +28,12 @@ const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }
             key={index}
             className="route-box"
           onMouseEnter={() => {
-            console.log(`Hovering over route ${index}`); // Debug log
             onHoverRoute(index);
+            handleBoxHover(index)
           }}
           onMouseLeave={() => {
-            console.log(`Leaving route ${index}`); // Debug log
             onLeaveRoute();
+            handleBoxLeave(index)
           }}
           onClick={() => onClickRoute(index)}
         >

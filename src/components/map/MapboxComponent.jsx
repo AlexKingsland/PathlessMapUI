@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs }) => {
 
   useEffect(() => {
     if (window.mapboxgl) {
@@ -48,6 +48,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
     if (map.getSource("route-line")) map.removeSource("route-line");
     document.querySelectorAll(".mapboxgl-marker").forEach((marker) => marker.remove());
     resetHighlightedMarkers();
+    markerRefs.current = {};
   };
 
   const drawTopLevelMarkers = () => {
@@ -63,6 +64,8 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
       new window.mapboxgl.Marker({ element: markerElement })
         .setLngLat([center.longitude, center.latitude])
         .addTo(map);
+
+      markerRefs.current[index] = markerElement;
 
       markerElement.addEventListener("click", () => zoomIntoRoute(index));
       markerElement.addEventListener("mouseover", () => handleHoverRoute(index));
