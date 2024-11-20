@@ -6,8 +6,6 @@ import SidePanel from "./SidePanel";
 function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, selectedWaypoint, currentRoute, onExplore }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  console.log("Navbar received createMapName:", createMapName); // Add this line for debugging
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (

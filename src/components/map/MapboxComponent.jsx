@@ -3,14 +3,10 @@ import { calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
 import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import WaypointFormPanel from "./WaypointFormPanel"; // Import the new component
+import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex }) => {
-  const mapContainerRef = useRef(null);
-  const [map, setMap] = useState(null);
-  const [isGlobalView, setIsGlobalView] = useState(true);
-  
-  
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers }) => {
+
   useEffect(() => {
     if (window.mapboxgl) {
       window.mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -35,9 +31,9 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
     if (map) {
       clearMap();
       if (isCreateMode) {
-        setCurrentRouteIndex(0); // Set the current route index to 0 when in create mode
+        setCurrentRouteIndex(0);
         if (routes[0]) {
-          drawRoute(routes[0]); // In create mode there is only 1 route
+          drawRoute(routes[0]);
         }
       } else if (isGlobalView) {
         drawTopLevelMarkers();
@@ -51,6 +47,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
     if (map.getLayer("route")) map.removeLayer("route");
     if (map.getSource("route-line")) map.removeSource("route-line");
     document.querySelectorAll(".mapboxgl-marker").forEach((marker) => marker.remove());
+    resetHighlightedMarkers();
   };
 
   const drawTopLevelMarkers = () => {
@@ -65,9 +62,11 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
 
       new window.mapboxgl.Marker({ element: markerElement })
         .setLngLat([center.longitude, center.latitude])
-        .addTo(map)
-        .getElement()
-        .addEventListener("click", () => zoomIntoRoute(index));
+        .addTo(map);
+
+      markerElement.addEventListener("click", () => zoomIntoRoute(index));
+      markerElement.addEventListener("mouseover", () => handleHoverRoute(index));
+      markerElement.addEventListener("mouseout", handleLeaveRoute);
     });
   };
 
@@ -121,13 +120,11 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
 
   const zoomIntoRoute = (index) => {
     setCurrentRouteIndex(index);
-    setIsGlobalView(false);
     toggleGlobalView(false);
   };
 
   const goToGlobalView = (mapInstance = map) => {
     if (mapInstance) {
-      setIsGlobalView(true);
       toggleGlobalView(true);
       setCurrentRouteIndex(null);
       setSelectedWaypoint(null);
@@ -144,8 +141,8 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, routes, addWay
       />
       {isFormPanelVisible && (
         <WaypointFormPanel
-          onAddWaypoint={addWaypointToUserRoutes} // Pass the function to add waypoints
-          onUpdateWaypoint={onUpdateWaypoint} // Pass the function to update waypoints
+          onAddWaypoint={addWaypointToUserRoutes}
+          onUpdateWaypoint={onUpdateWaypoint}
           onClose={() => setIsFormPanelVisible(false)}
         />
       )}

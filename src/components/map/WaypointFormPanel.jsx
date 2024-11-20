@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { useLoadScript } from "@react-google-maps/api";
-import "../../css/map/WaypointFormPanel.css"; // Add custom styling here
+import "../../css/map/WaypointFormPanel.css";
 
-const libraries = ["places"]; // Specify the libraries to be loaded
+const libraries = ["places"];
 
 const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Use your API key stored as an environment variable
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 
