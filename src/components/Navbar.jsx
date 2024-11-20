@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
 function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -16,7 +17,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
         </button>
       ) : (
         <>
-          <div className="hamburger navbar-button" onClick={toggleMenu}>
+          <div ref={menuButtonRef} className="hamburger navbar-button" onClick={toggleMenu}>
             <span className="bar"></span>
             <span className="bar"></span>
             <span className="bar"></span>
@@ -50,6 +51,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
         isMenuOpen={isMenuOpen} // Default state for the side panel
         toggleMenu={toggleMenu}
         onCreateMode={onBackToCreate} // Pass the function to switch to create mode
+        menuButtonRef={menuButtonRef} // Pass the menu button reference
       />
     </nav>
   );

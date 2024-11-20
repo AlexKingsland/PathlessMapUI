@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/SidePanel.css";
 
-function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode }) {
+function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef }) {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [createMapName, setCreateMapName] = useState("");
   const navigate = useNavigate();
@@ -10,7 +10,8 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (panelRef.current && !panelRef.current.contains(event.target)) {
+      if (panelRef.current && !panelRef.current.contains(event.target) && menuButtonRef.current && 
+      !menuButtonRef.current.contains(event.target)) {
         // If clicked outside of the panel, close it
         toggleMenu(false);
       }
