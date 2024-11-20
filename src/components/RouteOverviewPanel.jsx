@@ -8,8 +8,14 @@ const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }
         <div
           key={index}
           className="route-box"
-          onMouseEnter={() => onHoverRoute(index)}
-          onMouseLeave={onLeaveRoute(index)}
+          onMouseEnter={() => {
+            console.log(`Hovering over route ${index}`); // Debug log
+            onHoverRoute(index);
+          }}
+          onMouseLeave={() => {
+            console.log(`Leaving route ${index}`); // Debug log
+            onLeaveRoute();
+          }}
           onClick={() => onClickRoute(index)}
         >
           <div className="route-title">{route.title}</div>

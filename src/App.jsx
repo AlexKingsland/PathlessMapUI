@@ -8,6 +8,9 @@ import Navbar from "./components/Navbar";
 import { getRoutes } from "./waypoints"; // Import getRoutes function
 
 function App() {
+  const mapContainerRef = useRef(null);
+  const [map, setMap] = useState(null);
+  const highlightedMarkersRef = useRef([]);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [isGlobalView, setIsGlobalView] = useState(true); // Track global vs. zoomed-in view
   const [showBackToExploreButton, setShowBackToExploreButton] = useState(false); // Track if "Back to Explore" button is shown
@@ -23,16 +26,17 @@ function App() {
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
 
   useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const fetchedExploreRoutes = await getRoutes(); // Await the async function
-        setExploreRoutes(fetchedExploreRoutes);
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-      }
-    };
     fetchRoutes();
   }, []);
+
+  const fetchRoutes = async () => {
+    try {
+      const fetchedExploreRoutes = await getRoutes(); // Await the async function
+      setExploreRoutes(fetchedExploreRoutes);
+    } catch (error) {
+      console.error("Error fetching routes:", error);
+    }
+  };
 
   const handleExplore = () => {
     setCurrentRouteIndex(Math.floor(Math.random() * exploreRoutes.length));
@@ -40,11 +44,29 @@ function App() {
   };
 
   const handleHoverRoute = (index) => {
-    setHighlightedRouteIndex(index);
+    if (map && exploreRoutes[index]) {
+      const route = exploreRoutes[index];
+      const center = route.waypoints.length ? [route.waypoints[0].longitude, route.waypoints[0].latitude] : [0, 0];
+
+      resetHighlightedMarkers();
+
+      const markerElement = document.createElement("div");
+      markerElement.className = "highlighted-marker-box";
+      markerElement.innerHTML = `<div class="marker-title-box">${route.title}</div>`;
+
+      const newMarker = new window.mapboxgl.Marker({
+        element: markerElement,
+        offset: [0, -30] // Offset to position above the waypoint
+      })
+        .setLngLat(center)
+        .addTo(map);
+
+      highlightedMarkersRef.current.push(newMarker);
+    }
   };
 
   const handleLeaveRoute = () => {
-    setHighlightedRouteIndex(null);
+    resetHighlightedMarkers();
   };
 
   const handleSelectRoute = (index) => {
@@ -52,9 +74,11 @@ function App() {
     setIsGlobalView(false);
   };
 
-  const handleLogin = (token) => {
+  const handleLogin = async (token) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
+    // Fetch routes immediately after logging in
+    await fetchRoutes();
   };
 
   const handleLogout = () => {
@@ -86,6 +110,11 @@ function App() {
       duration: "",
       waypoints: []
     }]);
+  };
+
+  const resetHighlightedMarkers = () => {
+    highlightedMarkersRef.current.forEach(marker => marker.remove());
+    highlightedMarkersRef.current = [];
   };
 
   // Function to add a waypoint to their route
@@ -169,8 +198,8 @@ function App() {
             {!isCreateMode && isGlobalView && (
               <RouteOverviewPanel
                 routes={exploreRoutes}
-                onHoverRoute={handleHoverRoute}
-                onLeaveRoute={handleLeaveRoute}
+                onHoverRoute={index => handleHoverRoute(index)}
+                onLeaveRoute={() => handleLeaveRoute()}
                 onClickRoute={handleSelectRoute}
               />
             )}
@@ -198,6 +227,12 @@ function App() {
                   setCurrentRouteIndex={setCurrentRouteIndex}
                   currentRouteIndex={currentRouteIndex}
                   highlightedRouteIndex={highlightedRouteIndex} // Pass for map highlighting
+                  handleHoverRoute={handleHoverRoute}
+                  handleLeaveRoute={handleLeaveRoute}
+                  mapContainerRef={mapContainerRef}
+                  map={map}
+                  setMap={setMap}
+                  resetHighlightedMarkers={resetHighlightedMarkers}
                 />
               ) : (
                 <Navigate to="/login" />

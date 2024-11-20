@@ -5,10 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex }) => {
-  const mapContainerRef = useRef(null);
-  const [map, setMap] = useState(null);
-  const highlightedMarkersRef = useRef([]);
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, setIsFormPanelVisible, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers }) => {
 
   useEffect(() => {
     if (window.mapboxgl) {
@@ -53,11 +50,6 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
     resetHighlightedMarkers();
   };
 
-  const resetHighlightedMarkers = () => {
-    highlightedMarkersRef.current.forEach(marker => marker.remove());
-    highlightedMarkersRef.current = [];
-  };
-
   const drawTopLevelMarkers = () => {
     if (!routes || routes.length === 0) return;
 
@@ -76,32 +68,6 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
       markerElement.addEventListener("mouseover", () => handleHoverRoute(index));
       markerElement.addEventListener("mouseout", handleLeaveRoute);
     });
-  };
-
-  const handleHoverRoute = (index) => {
-    if (map && routes[index]) {
-      const route = routes[index];
-      const center = route.waypoints.length ? [route.waypoints[0].longitude, route.waypoints[0].latitude] : [0, 0];
-
-      resetHighlightedMarkers();
-
-      const markerElement = document.createElement("div");
-      markerElement.className = "highlighted-marker-box";
-      markerElement.innerHTML = `<div class="marker-title-box">${route.title}</div>`;
-
-      const newMarker = new window.mapboxgl.Marker({
-        element: markerElement,
-        offset: [0, -30] // Offset to position above the waypoint
-      })
-        .setLngLat(center)
-        .addTo(map);
-
-      highlightedMarkersRef.current.push(newMarker);
-    }
-  };
-
-  const handleLeaveRoute = () => {
-    resetHighlightedMarkers();
   };
 
   // this function is used to draw routes for both explore [n] and create [0] UI
