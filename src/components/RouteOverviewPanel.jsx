@@ -1,13 +1,18 @@
-import React from 'react';
-import '../css/RouteOverviewPanel.css';
+import React from "react";
+import "../css/RouteOverviewPanel.css";
 
 const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }) => {
   return (
     <div className="route-overview-panel">
-      {routes.map((route, index) => (
-        <div
-          key={index}
-          className="route-box"
+      {routes.length === 0 ? (
+        <div className="no-routes-message">
+          Sorry, no routes match this filter.
+        </div>
+      ) : (
+        routes.map((route, index) => (
+          <div
+            key={index}
+            className="route-box"
           onMouseEnter={() => {
             console.log(`Hovering over route ${index}`); // Debug log
             onHoverRoute(index);
@@ -35,7 +40,8 @@ const RouteOverviewPanel = ({ routes, onHoverRoute, onLeaveRoute, onClickRoute }
             </div>
           </div>
         </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };
