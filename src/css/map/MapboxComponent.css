@@ -1,6 +1,6 @@
 /* General marker styling for top-level markers */
 .top-level-marker {
-  background-color: blue;
+  background-color: rgb(101, 72, 33);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -15,10 +15,10 @@
 
 /* Hover effect for top-level markers */
 .top-level-marker:hover {
-  background-color: #00026b; /* Same as the :hover color */
+  background-color: #311b09;
   transition: background-color 0.3s ease;
   border-radius: 50%;
-  box-shadow: 0 0 10px #00026b;
+  box-shadow: 0 0 10px #2f1900;
 }
 
 /* General marker styling for waypoint markers */
@@ -62,8 +62,8 @@
 
 /* Hover effect for top-level markers when actuated by route box hover */
 .hovered-top-level-marker {
-  background-color: #00026b; /* Same as the :hover color */
+  background-color: #311b09;
   transition: background-color 0.3s ease;
   border-radius: 50%;
-  box-shadow: 0 0 10px #00026b;
+  box-shadow: 0 0 10px #2f1900;
 }

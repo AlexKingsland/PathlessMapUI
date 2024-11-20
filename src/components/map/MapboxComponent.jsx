@@ -137,7 +137,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
 
   return (
     <div>
-      <div ref={mapContainerRef} style={{ width: "100vw", height: "calc(100vh - 60px)" }} />
+      <div ref={mapContainerRef} style={{ width: "100vw", height: "calc(100vh - 53px)" }} />
       <WaypointDetailsPanel
         waypoint={selectedWaypoint}
         onClose={() => setSelectedWaypoint(null)}

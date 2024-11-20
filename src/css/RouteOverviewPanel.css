@@ -1,5 +1,5 @@
 .route-overview-panel {
-  width: 20% !important;
+  width: 22% !important;
   position: fixed;
   top: 54px;
   left: 0;
@@ -9,58 +9,82 @@
   padding: 16px;
   box-sizing: border-box;
   z-index: 800;
+  border-right: 2px solid #e4dcd0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .route-box {
   background-color: #ffffff;
-  border-radius: 6px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 16px;
-  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .route-box:hover {
-  background-color: #f0e6d9;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  background-color: #f4e8dc;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border: 1px solid #8b5e3c;
 }
 
 .no-routes-message {
-  font-size: 14px;
-  color: #4d2c2c;
+  font-size: 16px;
+  color: #5a4333;
   text-align: center;
-  padding: 16px;
-  margin-top: 40px;
-  background-color: #faebd7;
-  border: 1px solid #8b5e3c;
-  border-radius: 6px;
+  padding: 20px;
+  margin-top: 50px;
+  background-color: #fff3e4;
+  border: 2px dashed #8b5e3c;
+  border-radius: 8px;
+  animation: fade-in 0.3s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .route-title {
   font-size: 16px;
-  font-weight: bold;
-  color: #61422a;
-  margin: 0px 0 8px 0;
+  font-weight: 700;
+  color: #6b4c36;
+  margin: 0px 0 10px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .route-content {
   display: flex;
   align-items: flex-start;
+  gap: 10px;
 }
 
 .route-image-placeholder {
   flex-shrink: 0;
-  margin-right: 12px;
 }
 
 .route-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 3px;
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
   object-fit: cover;
+  border: 2px solid #e4dcd0;
+  transition: border-color 0.3s ease;
+}
+
+.route-image:hover {
+  border-color: #8b5e3c;
 }
 
 .route-details {
@@ -70,5 +94,11 @@
 .route-details p {
   margin: 4px 0;
   font-size: 12px;
-  color: #4d2c2c;
+  color: #5a4333;
+  line-height: 1.4;
+}
+
+.route-details p span {
+  color: #8b5e3c;
+  font-weight: 600;
 }
