@@ -24,6 +24,7 @@ function App() {
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
+  const [isRoutePanelOpen, setIsRoutePanelOpen] = useState(true);
   const markerRefs = useRef({});
 
   useEffect(() => {
@@ -42,6 +43,10 @@ function App() {
   const handleExplore = () => {
     setCurrentRouteIndex(Math.floor(Math.random() * exploreRoutes.length));
     setIsGlobalView(false);
+  };
+
+  const toggleRoutePanel = () => {
+    setIsRoutePanelOpen((prevState) => !prevState);
   };
 
   const handleHoverRoute = (index) => {
@@ -185,14 +190,12 @@ function App() {
           <>
             <Navbar
               onLogout={handleLogout}
-              onHomeClick={() => goToTopLevelViewRef.current && goToTopLevelViewRef.current()}
               showHomeButton={!isGlobalView}
               onBackToExplore={handleSwitchToExploreMode}
               onBackToCreate={handleSwitchToCreateMode}
               isCreateMode={isCreateMode}
               createMapName={createMapName}
               onPublish={handlePublish}
-              selectedWaypoint={selectedWaypoint}
               currentRoute={exploreRoutes[currentRouteIndex]}
               onExplore={handleExplore}
             />
@@ -203,6 +206,8 @@ function App() {
                 onLeaveRoute={() => handleLeaveRoute()}
                 onClickRoute={handleSelectRoute}
                 markerRefs={markerRefs}
+                isPanelOpen={isRoutePanelOpen}
+                togglePanel={toggleRoutePanel}
               />
             )}
           </>

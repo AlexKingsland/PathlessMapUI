@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, onHomeClick, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, selectedWaypoint, currentRoute, onExplore }) {
+function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

@@ -13,14 +13,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* Hover effect for top-level markers */
-.top-level-marker:hover {
-  background-color: #311b09;
-  transition: background-color 0.3s ease;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #2f1900;
-}
-
 /* General marker styling for waypoint markers */
 .waypoint-marker {
   background-color: red;
@@ -42,7 +34,7 @@
 }
 
 .highlighted-marker-box {
-  background-color: lightblue;
+  background-color: rgb(211, 200, 191);
   padding: 5px;
   border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -57,12 +49,20 @@
   transform: translateX(-50%);
   border-width: 5px;
   border-style: solid;
-  border-color: lightblue transparent transparent transparent; /* Create a triangle */
+  border-color: rgb(0, 0, 0) transparent transparent transparent; /* Create a triangle */
+}
+
+/* Hover effect for top-level markers */
+.top-level-marker:hover {
+  background-color: #be7a43;
+  transition: background-color 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #2f1900;
 }
 
 /* Hover effect for top-level markers when actuated by route box hover */
 .hovered-top-level-marker {
-  background-color: #311b09;
+  background-color: #be7a43;
   transition: background-color 0.3s ease;
   border-radius: 50%;
   box-shadow: 0 0 10px #2f1900;

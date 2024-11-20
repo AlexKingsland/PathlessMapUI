@@ -1,6 +1,6 @@
 .waypoint-form-panel {
     position: fixed;
-    top: 160px; /* Relative to navbar */
+    top: 160px;
     right: 0;
     width: 300px;
     height: calc(60% - 60px);
@@ -14,18 +14,18 @@
   }
 
   .waypoint-form-panel.closed {
-    transform: translateX(100%); /* Slide out of view */
+    transform: translateX(100%);
   }
   
   .waypoint-form-panel.open {
-    transform: translateX(0); /* Slide into view */
+    transform: translateX(0);
   }
   
   .waypoint-form-panel input {
     display: block;
     width: 100%;
     padding: 16px;
-    height: 27px; /* Specify the height */
+    height: 27px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -107,7 +107,7 @@
   .waypoint-form-panel .form-footer {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
     margin-top: 20px;
 }
 
@@ -119,18 +119,18 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  flex: 1; /* Allow buttons to grow and fit the space */
+  flex: 1;
 }
 
 .waypoint-form-panel .full-width-button {
-  width: 100%; /* Full width */
+  width: 100%;
   padding: 10px 15px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 10px; /* Spacing between elements */
+  margin-bottom: 10px;
   transition: background-color 0.3s;
 }
 
@@ -141,11 +141,11 @@
   .waypoint-form-panel .button-group {
     display: flex;
     justify-content: space-between;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
 }
 
 .waypoint-form-panel .button-group button {
-  margin-top: 10px; /* Adjust this value as needed */
+  margin-top: 10px;
 }
   
 .waypoint-form-panel button:hover {
@@ -158,11 +158,11 @@
 }
 
 .waypoint-form-panel .primary-button {
-  width: 100%; /* Full width for primary buttons */
+  width: 100%;
 }
 
 .waypoint-form-panel .secondary-button {
-  background-color: #6c757d; /* Different color for secondary buttons */
+  background-color: #6c757d;
   color: #fff;
 }
 
@@ -171,9 +171,9 @@
 }
 
 .next-button {
-  height: 40px; /* Set an aesthetic height */
-  margin-top: 10px; /* Add space between the button group and the Next button */
-  width: 100%; /* Full width */
+  height: 40px;
+  margin-top: 10px;
+  width: 100%;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -205,19 +205,19 @@
     position: absolute;
     top: 10px;
     right: 0px;
-    background: #fff !important; /* White background */
-    color: #6c757d !important; /* Grey "X" */
+    background: #fff !important;
+    color: #6c757d !important;
     border: none;
     font-size: 12px;
     cursor: pointer;
-    border-radius: 4px; /* Rounded corners */
-    padding: 5px; /* Add some padding for a better click area */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0); /* Subtle shadow */
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0);
 }
 
 .close-button:hover {
-    background-color: #e0e0e0cb !important; /* Light grey background */
-    color: #4d4d4d; /* Slightly darker grey "X" */
+    background-color: #e0e0e0cb !important;
+    color: #4d4d4d;
 }
   
   .reopen-button {
@@ -255,10 +255,10 @@
 
   .lat-lon-container {
     display: flex;
-    gap: 10px; /* Space between the input fields */
+    gap: 10px;
 }
 
 .lat-lon-container input {
-    flex: 1; /* Make input fields take equal space */
+    flex: 1;
     border: 1px solid #ccc;
 }
