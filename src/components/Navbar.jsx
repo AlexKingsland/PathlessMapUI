@@ -13,7 +13,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
       <div className="navbar-left">
       {(isCreateMode || showHomeButton) ? (
         <button className="global-view-button" onClick={onBackToExplore}>
-          Back to Explore
+          Home
         </button>
       ) : (
         <>
