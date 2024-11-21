@@ -171,6 +171,7 @@ function App() {
       console.error('Error publishing map and waypoints:', error);
       alert('Failed to publish map and waypoints.');
     }
+    fetchRoutes(); // Fetch the updated routes after publishing
   };
 
   // Function to switch to explore mode and close the form panel
@@ -198,6 +199,7 @@ function App() {
               onPublish={handlePublish}
               currentRoute={exploreRoutes[currentRouteIndex]}
               onExplore={handleExplore}
+              userRoutes={userRoutes}
             />
             {!isCreateMode && isGlobalView && (
               <RouteOverviewPanel
