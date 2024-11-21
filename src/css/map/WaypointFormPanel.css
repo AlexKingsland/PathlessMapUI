@@ -1,264 +1,160 @@
 .waypoint-form-panel {
-    position: fixed;
-    top: 160px;
-    right: 0;
-    width: 300px;
-    height: calc(60% - 60px);
-    background-color: #fff;
-    border-left: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-  }
-
-  .waypoint-form-panel.closed {
-    transform: translateX(100%);
-  }
-  
-  .waypoint-form-panel.open {
-    transform: translateX(0);
-  }
-  
-  .waypoint-form-panel input {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    height: 27px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  .waypoint-form-panel button {
-    margin-right: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .waypoint-form-panel button:hover {
-    background-color: #0056b3;
-  }
-  
-  .open-form-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .open-form-button:hover {
-    background-color: #218838;
-  }
-  
-  .waypoint-form-panel textarea {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-    box-sizing: border-box;
-  }
-  
-  .waypoint-form-panel h3 {
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .waypoint-form-panel button:last-child {
-    margin-right: 0;
-  }
-  
-  .waypoint-form-panel button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  .waypoint-form-panel button:disabled:hover {
-    background-color: #6c757d;
-  }
-  
-  .waypoint-form-panel input[type="number"]::-webkit-inner-spin-button,
-  .waypoint-form-panel input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  .waypoint-form-panel input[type="number"] {
-    -moz-appearance: textfield;
-  }
-  
-  .waypoint-form-panel .form-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+  width: 20%;
+  position: fixed;
+  top: calc(50% - (65% - 60px) / 2);
+  right: 0;
+  height: calc(65% - 60px);
+  background-color: #f5efe6;
+  padding: 10px 20px 10px 20px;
+  box-shadow: -3px 0 6px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
-.waypoint-form-panel button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  flex: 1;
+.waypoint-form-panel.open {
+  transform: translateX(0);
+}
+
+.waypoint-form-panel.closed {
+  transform: translateX(100%);
+}
+
+.waypoint-form-panel h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #61422a;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.waypoint-form-panel input,
+.waypoint-form-panel textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #d4c2b2;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #61422a;
+  background-color: #ffffff;
+}
+
+.waypoint-form-panel input:focus,
+.waypoint-form-panel textarea:focus {
+  border-color: #8b5e3c;
+  outline: none;
+}
+
+.waypoint-form-panel textarea {
+  resize: vertical;
+  height: 80px;
 }
 
 .waypoint-form-panel .full-width-button {
   width: 100%;
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: #8b5e3c;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   margin-bottom: 10px;
   transition: background-color 0.3s;
 }
 
 .waypoint-form-panel .full-width-button:hover {
-  background-color: #0056b3;
+  background-color: #5c3b28;
 }
 
-  .waypoint-form-panel .button-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.waypoint-form-panel .button-group button {
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
   margin-top: 10px;
 }
-  
-.waypoint-form-panel button:hover {
-  background-color: #0056b3;
+
+.button-group button {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #fff;
+  background-color: #8b5e3c;
 }
 
-.waypoint-form-panel button:disabled {
-  background-color: #6c757d;
+.button-group button:hover {
+  background-color: #5c3b28;
+}
+
+.button-group button:disabled {
+  background-color: #d3d3d3;
+  color: #6c757d;
   cursor: not-allowed;
 }
 
-.waypoint-form-panel .primary-button {
-  width: 100%;
-}
-
-.waypoint-form-panel .secondary-button {
-  background-color: #6c757d;
-  color: #fff;
-}
-
-.waypoint-form-panel .secondary-button:hover {
-  background-color: #5a6268;
-}
-
-.next-button {
-  height: 40px;
-  margin-top: 10px;
-  width: 100%;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-  .autocomplete-dropdown {
-    position: relative;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
-  }
-  
-  .autocomplete-dropdown div {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .autocomplete-dropdown div:hover {
-    background-color: #f0f0f0;
-  }
-
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 0px;
-    background: #fff !important;
-    color: #6c757d !important;
-    border: none;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    padding: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0);
-}
-
-.close-button:hover {
-    background-color: #e0e0e0cb !important;
-    color: #4d4d4d;
-}
-  
-  .reopen-button {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #555;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px 0 0 5px;
-  }
-  
-  .hamburger-icon {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 20px;
-    height: 16px;
-  }
-  
-  .hamburger-icon .bar {
-    display: block;
-    width: 100%;
-    height: 3px;
-    background-color: white;
-    border-radius: 2px;
-  }
-  
-  .reopen-button:hover .bar {
-    background-color: #ddd;
-  }
-
-  .lat-lon-container {
-    display: flex;
-    gap: 10px;
+.lat-lon-container {
+  display: flex;
+  gap: 10px;
 }
 
 .lat-lon-container input {
-    flex: 1;
-    border: 1px solid #ccc;
+  flex: 1;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #d4c2b2;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1100;
+  margin-top: 4px;
+}
+
+.autocomplete-dropdown div {
+  padding: 10px;
+  cursor: pointer;
+  color: #61422a;
+}
+
+.autocomplete-dropdown div:hover {
+  background-color: #f5efe6;
+}
+
+.toggle-tab {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #8b5e3c;
+  color: white;
+  padding: 15px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  transition: right 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.toggle-tab:hover {
+  background-color: #5c3b28;
+}
+
+.waypoint-form-panel.closed + .toggle-tab {
+  right: 5px;
+  transition: right 0.3s ease;
+}
+
+.waypoint-form-panel.open + .toggle-tab {
+  right: calc(20% + 5px);
+  transition: right 0.3s ease;
 }

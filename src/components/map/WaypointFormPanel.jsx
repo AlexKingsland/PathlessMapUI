@@ -5,7 +5,7 @@ import "../../css/map/WaypointFormPanel.css";
 
 const libraries = ["places"];
 
-const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
+const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, togglePanel }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -23,7 +23,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
   const [useGoogleSearch, setUseGoogleSearch] = useState(true);
   const [address, setAddress] = useState("");
   const [isPlotted, setIsPlotted] = useState(false); // Track if "Plot" was clicked
-  const [isPanelOpen, setIsPanelOpen] = useState(true); // Track if the panel is open
 
   if (loadError) return <div>Error loading Google Maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -88,19 +87,13 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
     setUseGoogleSearch((prev) => !prev);
   };
 
-  const togglePanel = () => {
-    setIsPanelOpen((prev) => !prev);
-  };
-
   // Determine if "Plot" button should be enabled
   const isPlotButtonDisabled = !currentWaypoint.latitude || !currentWaypoint.longitude;
 
   return (
     <div>
       <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
-        <button className="close-button" onClick={togglePanel}>X</button>
         <h3>Add Waypoint</h3>
-
         <button className="full-width-button" onClick={handleToggleInputMode}>
             {useGoogleSearch ? "Manual Input" : "Google Maps Input"}
         </button>
@@ -198,27 +191,18 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, onClose }) => {
           />
         </div>
 
-        {/* Button group for secondary actions */}
         <div className="button-group">
-            <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
-                Plot
-            </button>
-        </div>
-
-        {/* Full-width primary action button */}
-        <button className="primary-button next-button" onClick={handleAddWaypoint} disabled={!isPlotted}>
+          <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
+            Plot
+          </button>
+          <button onClick={handleAddWaypoint} disabled={!isPlotted}>
             Next
-        </button>
+          </button>
+        </div>
       </div>
-      {!isPanelOpen && (
-        <button className="reopen-button" onClick={togglePanel}>
-          <div className="hamburger-icon">
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </div>
-        </button>
-      )}
+      <div className="toggle-tab" onClick={togglePanel}>
+        {!isPanelOpen ? "❮" : "❯"}
+      </div>
     </div>
   );
 };

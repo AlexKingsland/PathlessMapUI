@@ -19,6 +19,7 @@ function App() {
   const [userRoutes, setUserRoutes] = useState([]); // State to hold user routes
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
   const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
+  const [waypointFormPanelVisible, setWaypointFormPanelVisible] = useState(false); // Track form panel visibility
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
   const [createMapName, setCreateMapName] = useState(""); // Track map name
   const [createMapWaypointIndex, setCreateMapWaypointIndex] = useState(0); // Track waypoint index for create mode
@@ -43,6 +44,10 @@ function App() {
   const handleExplore = () => {
     setCurrentRouteIndex(Math.floor(Math.random() * exploreRoutes.length));
     setIsGlobalView(false);
+  };
+
+  const toggleWaypointFormPanel = () => {
+    setWaypointFormPanelVisible(!waypointFormPanelVisible);
   };
 
   const toggleRoutePanel = () => {
@@ -105,7 +110,7 @@ function App() {
   const handleSwitchToCreateMode = (createMapName) => {
     setCreateMapName(createMapName); // Set the map name
     setIsCreateMode(true);
-    setIsFormPanelVisible(true); // Show the form panel
+    setWaypointFormPanelVisible(true); // Show the form panel
     setShowBackToExploreButton(true); // Show "Back to Explore" button
     setSelectedWaypoint(null);
 
@@ -143,7 +148,7 @@ function App() {
         updatedRoutes[0] = route;
         console.log(`Updated waypoint at index ${createMapWaypointIndex}:`, waypoint);
       } else {
-        console.error("Invalid index or route for updating waypoint.");
+        console.error("Invalid index or route for updating waypoint.", createMapWaypointIndex);
       }
       console.log("Updated Routes after adding waypoint:", updatedRoutes);
       return updatedRoutes;
@@ -176,9 +181,8 @@ function App() {
 
   // Function to switch to explore mode and close the form panel
   const handleSwitchToExploreMode = () => {
-    setCreateMapWaypointIndex();
+    setCreateMapWaypointIndex(0);
     setIsCreateMode(false);
-    setIsFormPanelVisible(false); // Close the form panel
     setSelectedWaypoint(null);
     setShowBackToExploreButton(false); // Hide "Back to Explore" button
     goToTopLevelViewRef.current && goToTopLevelViewRef.current(); // Go back to global view
@@ -228,14 +232,15 @@ function App() {
                   isGlobalView={isGlobalView}
                   addWaypointToUserRoutes={addWaypointToUserRoutes}
                   isFormPanelVisible={isFormPanelVisible}
-                  setIsFormPanelVisible={setIsFormPanelVisible}
+                  waypointFormPanelVisible={waypointFormPanelVisible}
+                  toggleWaypointFormPanel={toggleWaypointFormPanel}
                   isCreateMode={isCreateMode}
                   onUpdateWaypoint={handleUpdateWaypoint}
                   selectedWaypoint={selectedWaypoint}
                   setSelectedWaypoint={setSelectedWaypoint}
                   setCurrentRouteIndex={setCurrentRouteIndex}
                   currentRouteIndex={currentRouteIndex}
-                  highlightedRouteIndex={highlightedRouteIndex} // Pass for map highlighting
+                  highlightedRouteIndex={highlightedRouteIndex}
                   handleHoverRoute={handleHoverRoute}
                   handleLeaveRoute={handleLeaveRoute}
                   mapContainerRef={mapContainerRef}
