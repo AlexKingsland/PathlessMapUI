@@ -3,7 +3,7 @@
   top: 54px; /* Relative to navbar */
   left: 0;
   width: 250px;
-  height: calc(75% - 60px); 
+  height: calc(55% - 60px); 
   background-color: #8b5e3c;
   box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
   padding-top: 20px;
@@ -13,7 +13,32 @@
   z-index: 900;
   transition: transform 0.3s ease;
   transform: translateX(-100%); /* Hidden off-screen by default */
+  overflow-y: auto; /* Add vertical scroll when content overflows */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
+
+/* Ensure padding and margin do not contribute to width overflow */
+.side-pane * {
+  box-sizing: border-box;
+}
+
+/* Keep the buttons from overflowing the pane */
+.side-pane-button,
+.create-map-button,
+.map-name-input {
+  max-width: 100%; /* Prevent the elements from exceeding the pane width */
+}
+
+/* Optional: Hide scrollbars (only visible when scrolling) */
+.side-pane::-webkit-scrollbar {
+  width: 6px; /* Adjust the width of the scrollbar */
+}
+
+.side-pane::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Color of the scrollbar */
+  border-radius: 10px;
+}
+
 
 .side-pane.open {
   transform: translateX(0); /* Slide in when open */
@@ -63,3 +88,52 @@
 .side-pane-logout .logout-button:hover {
   background-color: #a85d3b;
 }
+
+.create-map-container {
+  position: relative;
+  width: 80%; /* Match width of other buttons */
+}
+
+.create-map-form {
+  display: flex;
+  width: 100%; /* Full width to match other buttons */
+  margin-top: 8px;
+}
+
+.map-name-input {
+  flex: 1; /* Takes the remaining width */
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px; /* Rounded left corners */
+  box-sizing: border-box;
+}
+
+.map-name-input {
+  width: 100%; /* Full width to match other buttons */
+  padding: 10px 20px; /* Same padding as the buttons */
+  font-size: 16px; /* Same font size as the buttons */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Prevent padding from affecting width */
+}
+
+/* Update the "Create a Map" button style to match the side-pane-button */
+.create-map-button {
+  background: none;
+  color: white;
+  font-size: 16px;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%; /* Full width */
+  text-align: left;
+  border-radius: 4px;
+}
+
+.create-map-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+

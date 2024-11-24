@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getRoutes, calculateCenter } from "../../waypoints";
+import { calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
 import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
-  const mapContainerRef = useRef(null);
-  const [map, setMap] = useState(null);
-  const [isGlobalView, setIsGlobalView] = useState(true);
-  const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
-  const [selectedWaypoint, setSelectedWaypoint] = useState(null);
-  const routes = getRoutes();
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs }) => {
 
   useEffect(() => {
     if (window.mapboxgl) {
@@ -26,7 +21,6 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
       newMap.addControl(new window.mapboxgl.NavigationControl());
       setMap(newMap);
 
-      // Only set resetToTopLevelView after map is initialized
       if (resetToTopLevelView) {
         resetToTopLevelView(() => goToGlobalView(newMap));
       }
@@ -36,43 +30,59 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
   useEffect(() => {
     if (map) {
       clearMap();
-      if (isGlobalView) {
+      if (isCreateMode) {
+        setCurrentRouteIndex(0);
+        if (routes[0]) {
+          drawRoute(routes[0]);
+        }
+      } else if (isGlobalView) {
         drawTopLevelMarkers();
-      } else if (currentRouteIndex !== null) {
+      } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
         drawRoute(routes[currentRouteIndex]);
       }
     }
-  }, [map, isGlobalView, currentRouteIndex]);
+  }, [map, isGlobalView, currentRouteIndex, routes]);
 
   const clearMap = () => {
     if (map.getLayer("route")) map.removeLayer("route");
     if (map.getSource("route-line")) map.removeSource("route-line");
     document.querySelectorAll(".mapboxgl-marker").forEach((marker) => marker.remove());
+    resetHighlightedMarkers();
+    markerRefs.current = {};
   };
 
   const drawTopLevelMarkers = () => {
+    if (!routes || routes.length === 0) return;
+
     routes.forEach((route, index) => {
       const center = calculateCenter(route.waypoints);
 
-      // Create the marker with a class for styling
       const markerElement = document.createElement("div");
       markerElement.className = "top-level-marker";
       markerElement.textContent = index + 1;
 
       new window.mapboxgl.Marker({ element: markerElement })
-        .setLngLat([center.lon, center.lat])
-        .addTo(map)
-        .getElement()
-        .addEventListener("click", () => zoomIntoRoute(index));
+        .setLngLat([center.longitude, center.latitude])
+        .addTo(map);
+
+      markerRefs.current[index] = markerElement;
+
+      markerElement.addEventListener("click", () => zoomIntoRoute(index));
+      markerElement.addEventListener("mouseover", () => handleHoverRoute(index));
+      markerElement.addEventListener("mouseout", handleLeaveRoute);
     });
   };
 
+  // this function is used to draw routes for both explore [n] and create [0] UI
   const drawRoute = (route) => {
+    if (!route || !route.waypoints || route.waypoints.length === 0) return;
+    console.log("Drawing route with waypoints:", route.waypoints); // Debug line
+
     const lineString = {
       type: "Feature",
       geometry: {
         type: "LineString",
-        coordinates: route.waypoints.map((wp) => [wp.lon, wp.lat]),
+        coordinates: route.waypoints.map((wp) => [wp.longitude, wp.latitude]),
       },
     };
 
@@ -98,7 +108,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
       markerElement.textContent = index + 1;
 
       const marker = new window.mapboxgl.Marker({ element: markerElement })
-        .setLngLat([waypoint.lon, waypoint.lat])
+        .setLngLat([waypoint.longitude, waypoint.latitude])
         .addTo(map);
 
       marker.getElement().addEventListener("click", () => {
@@ -107,20 +117,18 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
     });
 
     const bounds = new window.mapboxgl.LngLatBounds();
-    route.waypoints.forEach((wp) => bounds.extend([wp.lon, wp.lat]));
+    route.waypoints.forEach((wp) => bounds.extend([wp.longitude, wp.latitude]));
     map.fitBounds(bounds, { padding: 50 });
   };
 
   const zoomIntoRoute = (index) => {
     setCurrentRouteIndex(index);
-    setIsGlobalView(false);
-    toggleGlobalView(false); // Notify App.js that we're zoomed in
+    toggleGlobalView(false);
   };
 
   const goToGlobalView = (mapInstance = map) => {
     if (mapInstance) {
-      setIsGlobalView(true);
-      toggleGlobalView(true); // Notify App.js that we're back in global view
+      toggleGlobalView(true);
       setCurrentRouteIndex(null);
       setSelectedWaypoint(null);
       mapInstance.flyTo({ center: [0, 20], zoom: 1.5 });
@@ -129,11 +137,19 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView }) => {
 
   return (
     <div>
-      <div ref={mapContainerRef} style={{ width: "100vw", height: "100vh" }} />
+      <div ref={mapContainerRef} style={{ width: "100vw", height: "calc(100vh - 53px)" }} />
       <WaypointDetailsPanel
         waypoint={selectedWaypoint}
         onClose={() => setSelectedWaypoint(null)}
       />
+      {isCreateMode && (
+        <WaypointFormPanel
+          onAddWaypoint={addWaypointToUserRoutes}
+          onUpdateWaypoint={onUpdateWaypoint}
+          isPanelOpen={waypointFormPanelVisible}
+          togglePanel={toggleWaypointFormPanel}
+        />
+      )}
     </div>
   );
 };

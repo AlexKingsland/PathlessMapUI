@@ -1,41 +1,58 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState } from "react";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, onHomeClick, showHomeButton }) {
+function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const menuButtonRef = useRef(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <div className="hamburger navbar-button" onClick={toggleMenu}>
-          <span className="bar"></span>
-          <span className="bar"></span>
-          <span className="bar"></span>
-        </div>
-
-        <button className="navbar-button">Filters</button>
+      {(isCreateMode || showHomeButton) ? (
+        <button className="global-view-button" onClick={onBackToExplore}>
+          Home
+        </button>
+      ) : (
+        <>
+          <div ref={menuButtonRef} className="hamburger navbar-button" onClick={toggleMenu}>
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </div>
+          <button className="navbar-button">Filters</button>
+        </>
+      )}
       </div>
 
-      {/* Centered "Back to Global View" button */}
+      {/* Centered "Global View" button */}
       <div className="navbar-center">
-        {showHomeButton && (
-          <button className="global-view-button" onClick={onHomeClick}>
-            Global View
-          </button>
+        {showHomeButton && !isCreateMode && (
+          <b className="map-name-display">{currentRoute.title}</b>
+        )}
+        {isCreateMode && (
+          <b className="map-name-display">{createMapName}</b>
         )}
       </div>
 
       <div className="navbar-right">
-        <button className="navbar-button logout-button">Explore</button>
+      {isCreateMode && (
+        <button className="navbar-button logout-button" onClick={onPublish} disabled={userRoutes[0].waypoints.length === 0}>Publish</button>
+      )}
+      {!isCreateMode && (
+        <button className="navbar-button logout-button" onClick={onExplore}>Explore</button>
+      )}
       </div>
 
-      {/* Side Panel */}
-      <SidePanel onLogout={onLogout} isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <SidePanel
+        onLogout={onLogout}
+        isMenuOpen={isMenuOpen} // Default state for the side panel
+        toggleMenu={toggleMenu}
+        onCreateMode={onBackToCreate} // Pass the function to switch to create mode
+        menuButtonRef={menuButtonRef} // Pass the menu button reference
+      />
     </nav>
   );
 }

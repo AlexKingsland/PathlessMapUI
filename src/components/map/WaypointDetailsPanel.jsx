@@ -11,10 +11,11 @@ const WaypointDetailsPanel = ({ waypoint, onClose }) => {
       <button className="waypoint-details-close-btn" onClick={onClose}>
         ✕
       </button>
-      <h3>{waypoint.name}</h3>
-      <p><strong>Rating:</strong> {waypoint.rating}</p>
-      <p><strong>Notes:</strong> {waypoint.notes}</p>
+      <h3>{waypoint.title}</h3>
+      <p><strong>Info:</strong> {waypoint.info}</p>
       <p><strong>Description:</strong> {waypoint.description}</p>
+      <p><strong>Duration:</strong> {waypoint.duration}</p>
+      <p><strong>Price:</strong> ${waypoint.price}</p>
     </div>
   );
 };

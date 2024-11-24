@@ -1,0 +1,160 @@
+.waypoint-form-panel {
+  width: 20%;
+  position: fixed;
+  top: calc(50% - (65% - 60px) / 2);
+  right: 0;
+  height: calc(65% - 60px);
+  background-color: #f5efe6;
+  padding: 10px 20px 10px 20px;
+  box-shadow: -3px 0 6px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.waypoint-form-panel.open {
+  transform: translateX(0);
+}
+
+.waypoint-form-panel.closed {
+  transform: translateX(100%);
+}
+
+.waypoint-form-panel h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #61422a;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.waypoint-form-panel input,
+.waypoint-form-panel textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #d4c2b2;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #61422a;
+  background-color: #ffffff;
+}
+
+.waypoint-form-panel input:focus,
+.waypoint-form-panel textarea:focus {
+  border-color: #8b5e3c;
+  outline: none;
+}
+
+.waypoint-form-panel textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+.waypoint-form-panel .full-width-button {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #8b5e3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.waypoint-form-panel .full-width-button:hover {
+  background-color: #5c3b28;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #fff;
+  background-color: #8b5e3c;
+}
+
+.button-group button:hover {
+  background-color: #5c3b28;
+}
+
+.button-group button:disabled {
+  background-color: #d3d3d3;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.lat-lon-container {
+  display: flex;
+  gap: 10px;
+}
+
+.lat-lon-container input {
+  flex: 1;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #d4c2b2;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1100;
+  margin-top: 4px;
+}
+
+.autocomplete-dropdown div {
+  padding: 10px;
+  cursor: pointer;
+  color: #61422a;
+}
+
+.autocomplete-dropdown div:hover {
+  background-color: #f5efe6;
+}
+
+.toggle-tab {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #8b5e3c;
+  color: white;
+  padding: 15px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  transition: right 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.toggle-tab:hover {
+  background-color: #5c3b28;
+}
+
+.waypoint-form-panel.closed + .toggle-tab {
+  right: 5px;
+  transition: right 0.3s ease;
+}
+
+.waypoint-form-panel.open + .toggle-tab {
+  right: calc(20% + 5px);
+  transition: right 0.3s ease;
+}

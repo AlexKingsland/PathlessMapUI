@@ -1,0 +1,138 @@
+.route-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.route-box:hover {
+  background-color: #f4e8dc;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #8b5e3c;
+}
+
+.no-routes-message {
+  font-size: 16px;
+  color: #5a4333;
+  text-align: center;
+  padding: 20px;
+  margin-top: 50px;
+  background-color: #fff3e4;
+  border: 2px dashed #8b5e3c;
+  border-radius: 8px;
+  animation: fade-in 0.3s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.route-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6b4c36;
+  margin: 0px 0 10px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.route-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.route-image-placeholder {
+  flex-shrink: 0;
+}
+
+.route-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #e4dcd0;
+  transition: border-color 0.3s ease;
+}
+
+.route-image:hover {
+  border-color: #8b5e3c;
+}
+
+.route-details {
+  flex-grow: 1;
+}
+
+.route-details p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #5a4333;
+  line-height: 1.4;
+}
+
+.route-details p span {
+  color: #8b5e3c;
+  font-weight: 600;
+}
+
+.route-overview-panel {
+  width: 20%;
+  position: fixed;
+  top: 54px;
+  left: 0;
+  height: calc(100vh - 54px);
+  overflow-y: auto;
+  background-color: #f5efe6;
+  padding: 16px;
+  box-sizing: border-box;
+  z-index: 800;
+  transition: transform 0.3s ease;
+}
+
+.route-overview-panel.panel-open {
+  transform: translateX(0);
+}
+
+.route-overview-panel.panel-closed {
+  transform: translateX(-100%);
+}
+
+.toggle-panel-tab {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #8b5e3c;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 850;
+  transition: left 0.3s ease, background-color 0.3s ease;
+}
+
+.toggle-panel-tab:hover {
+  background-color: #61422a;
+}
+
+.panel-open + .toggle-panel-tab {
+  left: calc(20% + 5px);
+}
+
+.panel-closed + .toggle-panel-tab {
+  left: 5px;
+}
