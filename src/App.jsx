@@ -5,7 +5,8 @@ import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import RouteOverviewPanel from "./components/RouteOverviewPanel";
 import Navbar from "./components/Navbar";
-import { getRoutes } from "./waypoints"; // Import getRoutes function
+import { getRoutes } from "./waypoints";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
   const mapContainerRef = useRef(null);
@@ -38,6 +39,26 @@ function App() {
       setExploreRoutes(fetchedExploreRoutes);
     } catch (error) {
       console.error("Error fetching routes:", error);
+    }
+
+    // Check token expiration on app load
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Current time in seconds
+
+      if (decodedToken.exp < currentTime) {
+        // Token is expired
+        handleLogout();
+      } else {
+        // Set a timeout to log the user out when the token expires
+        const timeToExpire = decodedToken.exp * 1000 - Date.now();
+        const timeout = setTimeout(() => {
+          handleLogout();
+        }, timeToExpire);
+
+        return () => clearTimeout(timeout); // Clear timeout on component unmount
+      }
     }
   };
 

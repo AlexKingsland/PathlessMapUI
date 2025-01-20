@@ -1,3 +1,6 @@
+import handleLogout from './App.jsx';
+import setExploreRoutes from './App.jsx';
+
 const PATHLESS_BASE_URL = import.meta.env.VITE_PATHLESS_BASE_URL;
 const RUNTIME_MODE = import.meta.env.VITE_RUNTIME_MODE;
 
@@ -352,10 +355,13 @@ const fetchRoutesFromApi = async () => {
       }
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch routes from API');
+    if (response.status === 401) {
+      // Token is invalid or expired
+      handleLogout();
+      alert("Your session has expired. Please log in again.");
+    } else if (!response.ok) {
+      throw new Error("Failed to fetch routes from API");
     }
-
     const data = await response.json();
     return data; // List of maps, each with corresponding list of waypoints
   } catch (error) {

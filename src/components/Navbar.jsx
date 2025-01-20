@@ -48,10 +48,10 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
 
       <SidePanel
         onLogout={onLogout}
-        isMenuOpen={isMenuOpen} // Default state for the side panel
+        isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
-        onCreateMode={onBackToCreate} // Pass the function to switch to create mode
-        menuButtonRef={menuButtonRef} // Pass the menu button reference
+        onCreateMode={onBackToCreate}
+        menuButtonRef={menuButtonRef}
       />
     </nav>
   );
