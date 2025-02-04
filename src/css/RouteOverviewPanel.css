@@ -58,15 +58,17 @@
 
 .route-image-placeholder {
   flex-shrink: 0;
+  margin-right: 12px;
+  width: 20%;
+  max-width: 100px;
 }
 
 .route-image {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
   object-fit: cover;
-  border: 2px solid #e4dcd0;
-  transition: border-color 0.3s ease;
+  max-width: 100px;
 }
 
 .route-image:hover {
