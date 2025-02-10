@@ -27,6 +27,7 @@ function App() {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
   const [isRoutePanelOpen, setIsRoutePanelOpen] = useState(true);
+  const [isCreateMapModalVisible, setIsCreateMapModalVisible] = useState(false);
   const markerRefs = useRef({});
 
   useEffect(() => {
@@ -128,18 +129,20 @@ function App() {
   };
 
   // Function to switch to create mode and open the form panel
-  const handleSwitchToCreateMode = (createMapName) => {
+  const handleSwitchToCreateMode = (createMapName, mapDescription, mapDuration, mapImage) => {
     setCreateMapName(createMapName); // Set the map name
     setIsCreateMode(true);
     setWaypointFormPanelVisible(true); // Show the form panel
     setShowBackToExploreButton(true); // Show "Back to Explore" button
     setSelectedWaypoint(null);
+    setIsCreateMapModalVisible(false);
 
     // Create a new route with the given map name, empty description, and empty waypoints
     setUserRoutes([{
       title: createMapName,
-      description: "",
-      duration: "",
+      description: mapDescription,
+      duration: mapDuration,
+      map_image: mapImage,
       waypoints: []
     }]);
   };
@@ -178,27 +181,76 @@ function App() {
 
   const handlePublish = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_PATHLESS_BASE_URL}maps/create_with_waypoints`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(userRoutes[0]), // Send the entire route object
-      });
+      const route = userRoutes[0];
   
-      if (!response.ok) {
-        throw new Error('Failed to create map and waypoints');
+      // Create FormData to send the route and image data
+      const formData = new FormData();
+  
+      // Append basic route information
+      formData.append("title", route.title);
+      formData.append("description", route.description || "");
+      formData.append(
+        "duration",
+        `${route.duration.days || 0} days ${route.duration.hours || 0} hours ${route.duration.minutes || 0} minutes` // Properly format duration
+      );
+      formData.append("tags", JSON.stringify(route.tags || []));
+      formData.append("price", route.price || 0.0);
+  
+      // Append route image (if available)
+      if (route.map_image) {
+        formData.append("map_image", route.map_image);
       }
   
-      alert('Map and waypoints published successfully!');
+      // Append waypoints
+      formData.append(
+        "waypoints",
+        JSON.stringify(
+          route.waypoints.map((waypoint) => ({
+            title: waypoint.title,
+            description: waypoint.description || "",
+            info: waypoint.info || "",
+            latitude: waypoint.latitude,
+            longitude: waypoint.longitude,
+            tags: waypoint.tags || [],
+            price: waypoint.price || 0.0,
+            times_of_day: waypoint.times_of_day || null,
+          }))
+        )
+      );
+  
+      // Append waypoint images (if available)
+      route.waypoints.forEach((waypoint, index) => {
+        if (waypoint.image_data) {
+          formData.append(`waypoint_image_${index}`, waypoint.image_data);
+        }
+      });
+  
+      // Send the FormData to the backend
+      const response = await fetch(
+        `${import.meta.env.VITE_PATHLESS_BASE_URL}maps/create_with_waypoints`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Authorization token
+          },
+          body: formData,
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to create map and waypoints");
+      }
+  
+      alert("Map and waypoints published successfully!");
       handleSwitchToExploreMode(); // Switch to explore mode after publishing
     } catch (error) {
-      console.error('Error publishing map and waypoints:', error);
-      alert('Failed to publish map and waypoints.');
+      console.error("Error publishing map and waypoints:", error);
+      alert("Failed to publish map and waypoints.");
     }
+  
     fetchRoutes(); // Fetch the updated routes after publishing
   };
+  
 
   // Function to switch to explore mode and close the form panel
   const handleSwitchToExploreMode = () => {
@@ -269,6 +321,8 @@ function App() {
                   setMap={setMap}
                   resetHighlightedMarkers={resetHighlightedMarkers}
                   markerRefs={markerRefs}
+                  isCreateMapModalVisible={isCreateMapModalVisible}
+                  setIsCreateMapModalVisible={setIsCreateMapModalVisible}
                 />
               ) : (
                 <Navigate to="/login" />

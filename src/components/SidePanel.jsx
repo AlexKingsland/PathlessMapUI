@@ -1,17 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CreateMapModal from "./CreateMapModal"; // Import the modal component
 import "../css/SidePanel.css";
 
 function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef }) {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [createMapName, setCreateMapName] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const panelRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (panelRef.current && !panelRef.current.contains(event.target) && menuButtonRef.current && 
-      !menuButtonRef.current.contains(event.target)) {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target) &&
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(event.target)
+      ) {
         // If clicked outside of the panel, close it
         toggleMenu(false);
       }
@@ -36,53 +40,47 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
   };
 
   const handleCreateMapClick = () => {
-    setCreateMapName(""); // Reset the map name input field
-    setIsFormVisible(true);
+    setIsModalVisible(true); // Show the modal
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    if (onCreateMode && createMapName.trim()) {
-      onCreateMode(createMapName);
-      setIsFormVisible(false);
-      toggleMenu();
-    } else {
-      console.log("onCreateMode not called: either createMapName is empty or function is not defined."); // Debug line
-    }
+  const handleModalClose = () => {
+    setIsModalVisible(false); // Close the modal
   };
 
   return (
-    <div ref={panelRef} className={`side-pane ${isMenuOpen ? "open" : ""}`}>
-      <button className="side-pane-button" onClick={() => navigate("/profile")}>Pathless Profile</button>
-      <button className="side-pane-button" onClick={() => navigate("/account-details")}>Account Details</button>
-      <button className="side-pane-button" onClick={() => navigate("/saved-maps")}>Saved Maps</button>
-      
-      <div className="create-map-container">
-        <button
-          className="side-pane-button create-map-button"
-          onClick={handleCreateMapClick}
-        >
-          Create a Map
+    <>
+      <div ref={panelRef} className={`side-pane ${isMenuOpen ? "open" : ""}`}>
+        <button className="side-pane-button" onClick={() => navigate("/profile")}>
+          Pathless Profile
         </button>
-        {isFormVisible && (
-          <form onSubmit={handleFormSubmit} className="create-map-form">
-            <input
-              type="text"
-              placeholder="Enter Map Name"
-              value={createMapName}
-              onChange={(e) => setCreateMapName(e.target.value)}
-              className="map-name-input"
-            />
-          </form>
-        )}
+        <button className="side-pane-button" onClick={() => navigate("/account-details")}>
+          Account Details
+        </button>
+        <button className="side-pane-button" onClick={() => navigate("/saved-maps")}>
+          Saved Maps
+        </button>
+
+        <div className="create-map-container">
+          <button
+            className="side-pane-button create-map-button"
+            onClick={handleCreateMapClick}
+          >
+            Create a Map
+          </button>
+        </div>
+
+        <div className="side-pane-logout">
+          <button className="side-pane-button logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
 
-      <div className="side-pane-logout">
-        <button className="side-pane-button logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-    </div>
+      {/* Show the CreateMapModal */}
+      {isModalVisible && (
+        <CreateMapModal onClose={handleModalClose} onCreateMode={onCreateMode} toggleMenu={toggleMenu} />
+      )}
+    </>
   );
 }
 

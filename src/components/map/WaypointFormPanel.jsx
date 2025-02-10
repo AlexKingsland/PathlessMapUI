@@ -18,11 +18,15 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
     latitude: "",
     longitude: "",
     tags: "",
-    price: ""
+    price: "",
+    image: null // Store the uploaded image
   });
+
   const [useGoogleSearch, setUseGoogleSearch] = useState(true);
   const [address, setAddress] = useState("");
-  const [isPlotted, setIsPlotted] = useState(false); // Track if "Plot" was clicked
+  const [isPlotted, setIsPlotted] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageError, setImageError] = useState("");
 
   if (loadError) return <div>Error loading Google Maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -33,6 +37,37 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
       ...prev,
       [name]: name === "tags" ? value.split(",").map(tag => tag.trim()) : value
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+  
+    if (file) {
+      if (file.size > 2048 * 2048) { // 1MB size limit
+        setImageError("File size must be less than 1MB.");
+        setImagePreview(null); // Clear preview if there's an error
+        return;
+      }
+  
+      if (!file.type.startsWith("image/")) { // Validate file type
+        setImageError("Invalid file type. Only JPEG and PNG are allowed.");
+        setImagePreview(null); // Clear preview if there's an error
+        return;
+      }
+  
+      setImageError(""); // Clear any previous error
+      setCurrentWaypoint((prev) => ({
+        ...prev,
+        image_data: file // Store the file for later use
+      }));
+  
+      // Generate image preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result); // Set the preview to the base64 string
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSelect = async (value) => {
@@ -58,7 +93,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
   };
 
   const handleAddWaypoint = () => {
-    onAddWaypoint(); // Increment waypoint index or add to the route
+    onAddWaypoint();
     setCurrentWaypoint({
       title: "",
       description: "",
@@ -66,10 +101,12 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
       latitude: "",
       longitude: "",
       tags: "",
-      price: ""
+      price: "",
+      image: null
     });
     setAddress("");
-    setIsPlotted(false); // Reset the plot status
+    setIsPlotted(false);
+    setImagePreview(null);
   };
 
   const handleUpdateWaypoint = () => {
@@ -80,130 +117,144 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
       longitude: parseFloat(currentWaypoint.longitude),
       price: parseFloat(currentWaypoint.price)
     });
-    setIsPlotted(true); // Mark as plotted
+    setIsPlotted(true);
   };
 
   const handleToggleInputMode = () => {
     setUseGoogleSearch((prev) => !prev);
   };
 
-  // Determine if "Plot" button should be enabled
   const isPlotButtonDisabled = !currentWaypoint.latitude || !currentWaypoint.longitude;
 
   return (
     <div>
-      <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
-        <h3>Add Waypoint</h3>
-        <button className="full-width-button" onClick={handleToggleInputMode}>
+      <div>
+        <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
+          <h3>Add Waypoint</h3>
+          <button className="full-width-button" onClick={handleToggleInputMode}>
             {useGoogleSearch ? "Manual Input" : "Google Maps Input"}
-        </button>
+          </button>
 
-        {useGoogleSearch ? (
-          <PlacesAutocomplete
-            value={address}
-            onChange={setAddress}
-            onSelect={handleSelect}
-          >
-            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-              <div>
-                <input
-                  {...getInputProps({
-                    placeholder: "Search for a location",
-                    className: "google-maps-search-input"
-                  })}
-                />
-                <div className="autocomplete-dropdown">
-                  {loading && <div>Loading...</div>}
-                  {suggestions.map((suggestion) => {
-                    const style = {
-                      backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
-                      cursor: "pointer",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd"
-                    };
-                    return (
-                      <div {...getSuggestionItemProps(suggestion, { style })}>
-                        {suggestion.description}
-                      </div>
-                    );
-                  })}
+          {useGoogleSearch ? (
+            <PlacesAutocomplete
+              value={address}
+              onChange={setAddress}
+              onSelect={handleSelect}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div>
+                  <input
+                    {...getInputProps({
+                      placeholder: "Search for a location",
+                      className: "google-maps-search-input"
+                    })}
+                  />
+                  <div className="autocomplete-dropdown">
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map((suggestion) => {
+                      const style = {
+                        backgroundColor: suggestion.active ? "#f0f0f0" : "#ffffff",
+                        cursor: "pointer",
+                        padding: "10px",
+                        borderBottom: "1px solid #ddd"
+                      };
+                      return (
+                        <div {...getSuggestionItemProps(suggestion, { style })}>
+                          {suggestion.description}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </PlacesAutocomplete>
-        ) : (
-          <div>
-            <input
-              type="text"
-              name="title"
-              placeholder="Waypoint Title"
-              value={currentWaypoint.title}
-              onChange={handleChange}
-            />
-            {/* Latitude and Longitude input fields in a row */}
-            <div className="lat-lon-container">
+              )}
+            </PlacesAutocomplete>
+          ) : (
+            <div>
               <input
+                type="text"
+                name="title"
+                placeholder="Waypoint Title"
+                value={currentWaypoint.title}
+                onChange={handleChange}
+              />
+              <div className="lat-lon-container">
+                <input
                   type="number"
-                  name="lat"
+                  name="latitude"
                   placeholder="Latitude"
                   value={currentWaypoint.latitude}
                   onChange={handleChange}
-              />
-              <input
+                />
+                <input
                   type="number"
-                  name="lon"
+                  name="longitude"
                   placeholder="Longitude"
                   value={currentWaypoint.longitude}
                   onChange={handleChange}
-              />
+                />
+              </div>
             </div>
+          )}
+
+          <div>
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={currentWaypoint.description}
+              onChange={handleChange}
+            />
+            <textarea
+              name="info"
+              placeholder="Additional Info"
+              value={currentWaypoint.info}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="tags"
+              placeholder="Tags (comma-separated)"
+              value={currentWaypoint.tags}
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="price"
+              placeholder="Price"
+              step="0.01"
+              value={currentWaypoint.price}
+              onChange={handleChange}
+            />
           </div>
-        )}
 
-        {/* Common fields that stay visible */}
-        <div>
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={currentWaypoint.description}
-            onChange={handleChange}
-          />
-          <textarea
-            name="info"
-            placeholder="Additional Info"
-            value={currentWaypoint.info}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="tags"
-            placeholder="Tags (comma-separated)"
-            value={currentWaypoint.tags}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            step="0.01"
-            value={currentWaypoint.price}
-            onChange={handleChange}
-          />
-        </div>
+          {/* Image Upload Field */}
+          <div className="image-upload-section">
+            <label>Upload Image (Max 2MB)</label>
+            <input type="file" accept="image/png, image/jpeg" onChange={handleFileChange} />
+            {imageError && <p className="error-text">{imageError}</p>}
 
-        <div className="button-group">
-          <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
-            Plot
-          </button>
-          <button onClick={handleAddWaypoint} disabled={!isPlotted}>
-            Next
-          </button>
+            {/* Show Image Preview */}
+            {imagePreview && (
+              <div className="image-preview">
+                <img src={imagePreview} alt="Waypoint Preview" style={{ maxWidth: "100%", height: "auto" }} />
+              </div>
+            )}
+          </div>
+
+          <div className="button-group">
+            <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
+              Plot
+            </button>
+            <button onClick={handleAddWaypoint} disabled={!isPlotted}>
+              Next
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="toggle-tab" onClick={togglePanel}>
-        {!isPanelOpen ? "❮" : "❯"}
+        <div className="toggle-tab" onClick={togglePanel}>
+          {!isPanelOpen ? "❮" : "❯"}
+        </div>
       </div>
     </div>
+
   );
 };
 

@@ -54,8 +54,12 @@ const RouteOverviewPanel = ({
               <div className="route-content">
                 <div className="route-image-placeholder">
                   <img
-                    src="https://via.placeholder.com/100"
-                    alt="Route placeholder"
+                    src={
+                      route.image_data
+                        ? `data:image/jpeg;base64,${route.image_data}` // Replace with image field from your route object
+                        : "https://via.placeholder.com/100" // Fallback placeholder
+                    }
+                    alt={route.title || "Route image"}
                     className="route-image"
                   />
                 </div>
@@ -88,7 +92,7 @@ const RouteOverviewPanel = ({
         onClick={togglePanel}
         style={{
           left: isPanelOpen ? "calc(20% + 5px)" : "5px",
-          transition: "left 0.3s ease", // Ensure smooth transition for the toggle
+          transition: "left 0.3s ease",
         }}
       >
         {isPanelOpen ? "❮" : "❯"}

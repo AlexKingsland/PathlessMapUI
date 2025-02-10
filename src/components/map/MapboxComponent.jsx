@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible }) => {
 
   useEffect(() => {
     if (window.mapboxgl) {
@@ -148,6 +148,8 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
           onUpdateWaypoint={onUpdateWaypoint}
           isPanelOpen={waypointFormPanelVisible}
           togglePanel={toggleWaypointFormPanel}
+          isCreateMapModalVisible={isCreateMapModalVisible}
+          setIsCreateMapModalVisible={setIsCreateMapModalVisible}
         />
       )}
     </div>
