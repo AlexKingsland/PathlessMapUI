@@ -343,10 +343,14 @@ export const calculateCenter = (waypoints) => {
   };
 };
 
-const fetchRoutesFromApi = async () => {
+const fetchRoutesFromApi = async (filters = {}) => {
   try {
-    const tags = []; // Add relevant tags if needed
-    const query = `?tags=${encodeURIComponent(JSON.stringify(tags))}`;
+    // Construct query string dynamically based on filters
+    const queryParams = Object.entries(filters)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+    const query = queryParams ? `?${queryParams}` : '';
+
     const response = await fetch(`${PATHLESS_BASE_URL}maps/get_filtered_maps_with_waypoints${query}`, {
       method: 'GET',
       headers: {
@@ -362,6 +366,7 @@ const fetchRoutesFromApi = async () => {
     } else if (!response.ok) {
       throw new Error("Failed to fetch routes from API");
     }
+
     const data = await response.json();
     return data; // List of maps, each with corresponding list of waypoints
   } catch (error) {
@@ -370,12 +375,13 @@ const fetchRoutesFromApi = async () => {
   }
 };
 
+
 // Exported function that decides whether to return mock data or call the API
-export const getRoutes = async () => {
+export const getRoutes = async (filters = {}) => {
   console.log("Runtime mode:", RUNTIME_MODE); // Debug line
   if (RUNTIME_MODE === 'test') {
     return routes; // Return mock data
   } else if (RUNTIME_MODE === 'live') {
-    return await fetchRoutesFromApi(); // Call the API and return live data
+    return await fetchRoutesFromApi(filters); // Call the API and return live data
   }
 };

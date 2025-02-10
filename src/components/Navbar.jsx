@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 
-function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes }) {
+function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
 
@@ -52,6 +52,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
         toggleMenu={toggleMenu}
         onCreateMode={onBackToCreate}
         menuButtonRef={menuButtonRef}
+        fetchRoutes={fetchRoutes}
       />
     </nav>
   );

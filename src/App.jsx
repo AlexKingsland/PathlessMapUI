@@ -34,9 +34,9 @@ function App() {
     fetchRoutes();
   }, []);
 
-  const fetchRoutes = async () => {
+  const fetchRoutes = async (filters = {}) => {
     try {
-      const fetchedExploreRoutes = await getRoutes(); // Await the async function
+      const fetchedExploreRoutes = await getRoutes(filters); // Await the async function
       setExploreRoutes(fetchedExploreRoutes);
     } catch (error) {
       console.error("Error fetching routes:", error);
@@ -278,6 +278,7 @@ function App() {
               currentRoute={exploreRoutes[currentRouteIndex]}
               onExplore={handleExplore}
               userRoutes={userRoutes}
+              fetchRoutes={fetchRoutes}
             />
             {!isCreateMode && isGlobalView && (
               <RouteOverviewPanel
