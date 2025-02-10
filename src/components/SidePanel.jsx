@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CreateMapModal from "./CreateMapModal"; // Import the modal component
 import "../css/SidePanel.css";
 
-function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes }) {
+function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes, setCurrentlyShowingFilteredDownMaps }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const panelRef = useRef(null);
@@ -70,13 +70,13 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
       return null;
     }
   };
-  
-  
 
   const handleFetchMyMaps = async () => {
     const userId = await fetchUserId();
     if (userId) {
+      setCurrentlyShowingFilteredDownMaps(true);
       fetchRoutes({ creator_id: userId }); // Fetch routes filtered by the user's ID
+      toggleMenu(false);
     } else {
       console.error("Could not fetch user ID");
       alert("Failed to fetch your maps. Please try again.");

@@ -28,6 +28,7 @@ function App() {
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
   const [isRoutePanelOpen, setIsRoutePanelOpen] = useState(true);
   const [isCreateMapModalVisible, setIsCreateMapModalVisible] = useState(false);
+  const [currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps] = useState(false);
   const markerRefs = useRef({});
 
   useEffect(() => {
@@ -254,11 +255,17 @@ function App() {
   
 
   // Function to switch to explore mode and close the form panel
-  const handleSwitchToExploreMode = () => {
-    setCreateMapWaypointIndex(0);
-    setIsCreateMode(false);
-    setSelectedWaypoint(null);
-    setShowBackToExploreButton(false); // Hide "Back to Explore" button
+  const handleSwitchToExploreMode = (reloadAllMaps = false, myMapMode = false) => {
+    if (!myMapMode) {
+      setCreateMapWaypointIndex(0);
+      setIsCreateMode(false);
+      setSelectedWaypoint(null);
+      setShowBackToExploreButton(false); // Hide "Back to Explore" button
+      setCurrentlyShowingFilteredDownMaps(false); // Indicate we are now showing all maps without filter
+    }
+    if (reloadAllMaps) {
+      fetchRoutes();
+    }
     goToTopLevelViewRef.current && goToTopLevelViewRef.current(); // Go back to global view
   };
 
@@ -279,6 +286,8 @@ function App() {
               onExplore={handleExplore}
               userRoutes={userRoutes}
               fetchRoutes={fetchRoutes}
+              currentlyShowingFilteredDownMaps={currentlyShowingFilteredDownMaps}
+              setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
             />
             {!isCreateMode && isGlobalView && (
               <RouteOverviewPanel
