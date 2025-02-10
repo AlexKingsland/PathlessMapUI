@@ -66,6 +66,7 @@ function App() {
   const handleExplore = () => {
     setCurrentRouteIndex(Math.floor(Math.random() * exploreRoutes.length));
     setIsGlobalView(false);
+    setSelectedWaypoint(null);
   };
 
   const toggleWaypointFormPanel = () => {
