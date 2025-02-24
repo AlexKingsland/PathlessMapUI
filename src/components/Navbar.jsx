@@ -1,10 +1,26 @@
 import React, { useRef, useState } from "react";
 import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
+import FilterPanel from "./FilterPanel";
 
 function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
+  const [isFiltersPanelVisible, setIsFiltersPanelVisible] = useState(false);
+
+  const toggleFiltersPanel = () => {
+    setIsFiltersPanelVisible(!isFiltersPanelVisible);
+  };
+
+  const onCloseFilters = () => {
+    setIsFiltersPanelVisible(false);
+  };
+
+  const handleApplyFilters = (filters) => {
+    console.log("Applied Filters:", filters);
+    setIsFiltersPanelVisible(false); // Close the panel after applying
+    fetchRoutes(filters); // Call your API with the applied filters
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -32,7 +48,12 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
               <span className="bar"></span>
               <span className="bar"></span>
             </div>
-            <button className="navbar-button">Filters</button>
+            <button className="navbar-button" onClick={toggleFiltersPanel}>
+              Filters
+            </button>
+            {isFiltersPanelVisible && (
+              <FilterPanel onApplyFilters={handleApplyFilters} onCloseFilters={onCloseFilters} />
+            )}
           </>
         )}
       </div>
