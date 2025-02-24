@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/FilterPanel.css";
 
-const FilterPanel = ({ onApplyFilters, onCloseFilters }) => {
+const FilterPanel = ({ onApplyFilters, onCloseFilters, filterButtonRef }) => {
+  const panelRef = useRef(null);
   
   const sliderConfig = {
     price: { min: 0, max: 1000 },
@@ -18,6 +19,25 @@ const FilterPanel = ({ onApplyFilters, onCloseFilters }) => {
   };
 
   const [filters, setFilters] = useState(baseFilterState);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target) &&
+        filterButtonRef.current &&
+        !filterButtonRef.current.contains(event.target)
+      ) {
+        // If clicked outside of the panel, close it
+        onCloseFilters();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onCloseFilters]);
   
   const handleSliderChange = (key, newLow, newHigh) => {
     const { min, max } = sliderConfig[key];
@@ -54,7 +74,7 @@ const FilterPanel = ({ onApplyFilters, onCloseFilters }) => {
   }
 
   return (
-    <div className="filter-panel">
+    <div ref={panelRef} className="filter-panel">
       <div className="filter-triangle"></div>
       <div className="filter-content">
         <h3 className="filter-title">Filters</h3>

@@ -6,6 +6,7 @@ import FilterPanel from "./FilterPanel";
 function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
+  const filterButtonRef = useRef(null);
   const [isFiltersPanelVisible, setIsFiltersPanelVisible] = useState(false);
 
   const toggleFiltersPanel = () => {
@@ -48,11 +49,11 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
               <span className="bar"></span>
               <span className="bar"></span>
             </div>
-            <button className="navbar-button" onClick={toggleFiltersPanel}>
+            <button ref={filterButtonRef} className="navbar-button" onClick={toggleFiltersPanel}>
               Filters
             </button>
             {isFiltersPanelVisible && (
-              <FilterPanel onApplyFilters={handleApplyFilters} onCloseFilters={onCloseFilters} />
+              <FilterPanel onApplyFilters={handleApplyFilters} onCloseFilters={onCloseFilters} filterButtonRef={filterButtonRef} />
             )}
           </>
         )}
