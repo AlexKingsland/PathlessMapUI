@@ -271,44 +271,29 @@ function App() {
 
   return (
     <Router>
-      <div>
-        {isAuthenticated && (
-          <>
-            <Navbar
-              onLogout={handleLogout}
-              showHomeButton={!isGlobalView}
-              onBackToExplore={handleSwitchToExploreMode}
-              onBackToCreate={handleSwitchToCreateMode}
-              isCreateMode={isCreateMode}
-              createMapName={createMapName}
-              onPublish={handlePublish}
-              currentRoute={exploreRoutes[currentRouteIndex]}
-              onExplore={handleExplore}
-              userRoutes={userRoutes}
-              fetchRoutes={fetchRoutes}
-              currentlyShowingFilteredDownMaps={currentlyShowingFilteredDownMaps}
-              setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
-            />
-            {!isCreateMode && isGlobalView && (
-              <RouteOverviewPanel
-                routes={exploreRoutes}
-                onHoverRoute={index => handleHoverRoute(index)}
-                onLeaveRoute={() => handleLeaveRoute()}
-                onClickRoute={handleSelectRoute}
-                markerRefs={markerRefs}
-                isPanelOpen={isRoutePanelOpen}
-                togglePanel={toggleRoutePanel}
-              />
-            )}
-          </>
-        )}
-        <Routes>
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/map"
-            element={
-              isAuthenticated ? (
+      <Routes>
+        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/map"
+          element={
+            isAuthenticated ? (
+              <div>
+                <Navbar
+                  onLogout={handleLogout}
+                  showHomeButton={!isGlobalView}
+                  onBackToExplore={handleSwitchToExploreMode}
+                  onBackToCreate={handleSwitchToCreateMode}
+                  isCreateMode={isCreateMode}
+                  createMapName={createMapName}
+                  onPublish={handlePublish}
+                  currentRoute={exploreRoutes[currentRouteIndex]}
+                  onExplore={handleExplore}
+                  userRoutes={userRoutes}
+                  fetchRoutes={fetchRoutes}
+                  currentlyShowingFilteredDownMaps={currentlyShowingFilteredDownMaps}
+                  setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
+                />
                 <MapboxComponent
                   routes={isCreateMode ? userRoutes : exploreRoutes}
                   resetToTopLevelView={setGoToTopLevelView}
@@ -335,14 +320,25 @@ function App() {
                   isCreateMapModalVisible={isCreateMapModalVisible}
                   setIsCreateMapModalVisible={setIsCreateMapModalVisible}
                 />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="*" element={<Navigate to={isAuthenticated ? "/map" : "/login"} />} />
-        </Routes>
-      </div>
+                {!isCreateMode && isGlobalView && (
+                  <RouteOverviewPanel
+                    routes={exploreRoutes}
+                    onHoverRoute={index => handleHoverRoute(index)}
+                    onLeaveRoute={() => handleLeaveRoute()}
+                    onClickRoute={handleSelectRoute}
+                    markerRefs={markerRefs}
+                    isPanelOpen={isRoutePanelOpen}
+                    togglePanel={toggleRoutePanel}
+                  />
+                )}
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route path="*" element={<Navigate to={isAuthenticated ? "/map" : "/login"} />} />
+      </Routes>
     </Router>
   );
 }
