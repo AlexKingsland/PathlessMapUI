@@ -1,137 +1,154 @@
+/* Waypoint Overview Panel Styling */
+.waypoint-overview-panel {
+  width: 20%;
+  position: fixed;
+  top: 54px;
+  left: 0;
+  height: calc(100vh - 54px);
+  background-color: #f5efe6;
+  padding: 16px;
+  box-sizing: border-box;
+  z-index: 800;
+  transition: transform 0.3s ease;
+  color: #5a4333;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.waypoint-overview-panel.panel-open {
+  transform: translateX(0);
+}
+
+.waypoint-overview-panel.panel-closed {
+  transform: translateX(-100%);
+}
+
+/* Make the map metadata static while allowing waypoint list to scroll */
+.map-metadata {
+  flex-shrink: 0;
+  background-color: #f5efe6;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #d4c2b2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: center;
+}
+
+.map-image-container {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Waypoints list should scroll */
+.waypoints-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-top: 10px;
+  max-height: calc(100vh - 200px); /* Ensure scrolling fits viewport */
+  overflow-x: hidden;
+}
+
 .waypoint-box {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    cursor: pointer;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  }
-  
-  .waypoint-box:hover {
-    background-color: #f4e8dc;
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid #8b5e3c;
-  }
-  
-  .no-waypoints-message {
-    font-size: 16px;
-    color: #5a4333;
-    text-align: center;
-    padding: 20px;
-    margin-top: 50px;
-    background-color: #fff3e4;
-    border: 2px dashed #8b5e3c;
-    border-radius: 8px;
-    animation: fade-in 0.3s ease-in-out;
-  }
-  
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  .waypoint-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #6b4c36;
-    margin: 0px 0 10px 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  
-  .waypoint-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  
-  .waypoint-image-placeholder {
-    flex-shrink: 0;
-    margin-right: 12px;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .waypoint-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .waypoint-details {
-    flex-grow: 1;
-  }
-  
-  .waypoint-details p {
-    margin: 4px 0;
-    font-size: 12px;
-    color: #5a4333;
-    line-height: 1.4;
-  }
-  
-  .waypoint-details p span {
-    color: #8b5e3c;
-    font-weight: 600;
-  }
-  
-  .waypoint-overview-panel {
-    width: 20%;
-    position: fixed;
-    top: 54px;
-    left: 0;
-    height: calc(100vh - 54px);
-    overflow-y: auto;
-    background-color: #f5efe6;
-    padding: 16px;
-    box-sizing: border-box;
-    z-index: 800;
-    transition: transform 0.3s ease;
-  }
-  
-  .waypoint-overview-panel.panel-open {
-    transform: translateX(0);
-  }
-  
-  .waypoint-overview-panel.panel-closed {
-    transform: translateX(-100%);
-  }
-  
-  .toggle-panel-tab {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #8b5e3c;
-    color: white;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 850;
-    transition: left 0.3s ease, background-color 0.3s ease;
-  }
-  
-  .toggle-panel-tab:hover {
-    background-color: #61422a;
-  }
-  
-  .panel-open + .toggle-panel-tab {
-    left: calc(20% + 5px);
-  }
-  
-  .panel-closed + .toggle-panel-tab {
-    left: 5px;
-  }
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  color: #5a4333;
+}
+
+.waypoint-box:hover {
+  background-color: #f4e8dc;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #8b5e3c;
+}
+
+.waypoint-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.waypoint-image-placeholder {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.waypoint-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.waypoint-details {
+  flex-grow: 1;
+}
+
+.waypoint-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6b4c36;
+  margin-bottom: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.waypoint-details p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #5a4333;
+  line-height: 1.4;
+}
+
+.waypoint-details p span {
+  color: #8b5e3c;
+  font-weight: 600;
+}
+
+.toggle-panel-tab {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #8b5e3c;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 850;
+  transition: left 0.3s ease, background-color 0.3s ease;
+}
+
+.toggle-panel-tab:hover {
+  background-color: #61422a;
+}
+
+.panel-open + .toggle-panel-tab {
+  left: calc(20% + 5px);
+}
+
+.panel-closed + .toggle-panel-tab {
+  left: 5px;
+}
