@@ -13,26 +13,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* General marker styling for waypoint markers */
-.waypoint-marker {
-  background-color: red;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-/* Hover effect for waypoint markers */
-.waypoint-marker:hover {
-  background-color: #26ff00;
-}
-
 .highlighted-marker-box {
   background-color: rgb(211, 200, 191);
   padding: 5px;
@@ -66,4 +46,35 @@
   transition: background-color 0.3s ease;
   border-radius: 50%;
   box-shadow: 0 0 10px #2f1900;
+}
+
+/* General marker styling for waypoint markers */
+.waypoint-marker {
+  background-color: #ff1e1e; /* Bright Red */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for waypoint markers */
+.waypoint-marker:hover {
+  background-color: hsl(237, 100%, 61%); /* Vivid Blue for contrast */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 0 14px #0044cc; /* Deep Blue Glow */
+}
+
+/* Hover effect for waypoint markers when actuated by route box hover */
+.hovered-waypoint-marker {
+  background-color: hsl(237, 100%, 61%); /* Vivid Blue for contrast */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 0 14px #0044cc; /* Deep Blue Glow */
 }

@@ -4,6 +4,7 @@ import MapboxComponent from "./components/map/MapboxComponent";
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import RouteOverviewPanel from "./components/RouteOverviewPanel";
+import WaypointOverviewPanel from "./components/map/WaypointOverviewPanel";
 import Navbar from "./components/Navbar";
 import { getRoutes } from "./waypoints";
 import { jwtDecode } from "jwt-decode";
@@ -27,9 +28,11 @@ function App() {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(null);
   const [highlightedRouteIndex, setHighlightedRouteIndex] = useState(null); // State for highlighting routes
   const [isRoutePanelOpen, setIsRoutePanelOpen] = useState(true);
+  const [isWaypointPanelOpen, setIsRouteWaypointPanelOpen] = useState(true);
   const [isCreateMapModalVisible, setIsCreateMapModalVisible] = useState(false);
   const [currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps] = useState(false);
   const markerRefs = useRef({});
+  const waypointMarkerRefs = useRef({});
 
   useEffect(() => {
     fetchRoutes();
@@ -78,6 +81,10 @@ function App() {
     setIsRoutePanelOpen((prevState) => !prevState);
   };
 
+  const toggleWaypointPanel = () => {
+    setIsRouteWaypointPanelOpen((prevState) => !prevState);
+  };
+
   const handleHoverRoute = (index) => {
     if (map && exploreRoutes[index]) {
       const route = exploreRoutes[index];
@@ -108,6 +115,49 @@ function App() {
     setCurrentRouteIndex(index);
     setIsGlobalView(false);
   };
+
+  const handleHoverWaypoint = (index) => {
+    if (map && exploreRoutes[currentRouteIndex]?.waypoints[index]) {
+      const waypoint = exploreRoutes[currentRouteIndex].waypoints[index];
+  
+      resetHighlightedMarkers();
+  
+      const markerElement = document.createElement("div");
+      markerElement.className = "highlighted-marker-box";
+      markerElement.innerHTML = `<div class="marker-title-box">${waypoint.title}</div>`;
+  
+      const newMarker = new window.mapboxgl.Marker({
+        element: markerElement,
+        offset: [0, -30], // Offset to position above the waypoint
+      })
+        .setLngLat([waypoint.longitude, waypoint.latitude])
+        .addTo(map);
+  
+      highlightedMarkersRef.current.push(newMarker);
+    }
+  };
+  
+  const handleLeaveWaypoint = () => {
+    resetHighlightedMarkers();
+  };
+  
+  const handleSelectWaypoint = (index) => {
+    if (exploreRoutes[currentRouteIndex]?.waypoints[index]) {
+      const waypoint = exploreRoutes[currentRouteIndex].waypoints[index];
+      
+      setSelectedWaypoint(waypoint);
+  
+      // Optionally zoom into the selected waypoint
+      if (map) {
+        map.flyTo({
+          center: [waypoint.longitude, waypoint.latitude],
+          zoom: 14,
+          essential: true,
+        });
+      }
+    }
+  };
+  
 
   const handleLogin = async (token) => {
     localStorage.setItem("token", token);
@@ -312,25 +362,42 @@ function App() {
                   highlightedRouteIndex={highlightedRouteIndex}
                   handleHoverRoute={handleHoverRoute}
                   handleLeaveRoute={handleLeaveRoute}
+                  handleHoverWaypoint={handleHoverWaypoint}
+                  handleLeaveWaypoint={handleLeaveWaypoint}
                   mapContainerRef={mapContainerRef}
                   map={map}
                   setMap={setMap}
                   resetHighlightedMarkers={resetHighlightedMarkers}
                   markerRefs={markerRefs}
+                  waypointMarkerRefs={waypointMarkerRefs}
                   isCreateMapModalVisible={isCreateMapModalVisible}
                   setIsCreateMapModalVisible={setIsCreateMapModalVisible}
                 />
-                {!isCreateMode && isGlobalView && (
-                  <RouteOverviewPanel
-                    routes={exploreRoutes}
-                    onHoverRoute={index => handleHoverRoute(index)}
-                    onLeaveRoute={() => handleLeaveRoute()}
-                    onClickRoute={handleSelectRoute}
-                    markerRefs={markerRefs}
-                    isPanelOpen={isRoutePanelOpen}
-                    togglePanel={toggleRoutePanel}
-                  />
-                )}
+                {!isCreateMode && (
+                <>
+                  {isGlobalView ? (
+                    <RouteOverviewPanel
+                      routes={exploreRoutes}
+                      onHoverRoute={index => handleHoverRoute(index)}
+                      onLeaveRoute={() => handleLeaveRoute()}
+                      onClickRoute={handleSelectRoute}
+                      markerRefs={markerRefs}
+                      isPanelOpen={isRoutePanelOpen}
+                      togglePanel={toggleRoutePanel}
+                    />
+                  ) : (
+                    <WaypointOverviewPanel
+                      route={exploreRoutes[currentRouteIndex]}
+                      onHoverWaypoint={index => handleHoverWaypoint(index)}
+                      onLeaveWaypoint={() => handleLeaveWaypoint()}
+                      onClickWaypoint={handleSelectWaypoint}
+                      waypointMarkerRefs={waypointMarkerRefs}
+                      isPanelOpen={isWaypointPanelOpen}
+                      togglePanel={toggleWaypointPanel}
+                    />
+                  )}
+                </>
+              )}
               </div>
             ) : (
               <Navigate to="/login" />
