@@ -99,4 +99,57 @@
   .register-link a:hover, .login-link a:hover {
     text-decoration: underline;
   }
+
+  .custom-file-button {
+    display: inline-block;
+    background-color: #8B5E3B; /* Warm brown tone */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-file-button:hover {
+    background-color: #6D4C33; /* Darker brown on hover */
+    transform: scale(1.05);
+  }
+  
+  .custom-file-button:active {
+    background-color: #563A27; /* Even darker brown when clicked */
+    transform: scale(0.98);
+  }
+  
+  /* Centering the entire upload section */
+  .image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Centering the image preview & adding more padding */
+  .image-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0; /* Added more top and bottom padding */
+  }
+  
+  .image-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #8B5E3B; /* Matches button color */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px; /* Adds some internal spacing */
+  }
   
