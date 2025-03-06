@@ -58,6 +58,8 @@
   padding-top: 10px;
   max-height: calc(100vh - 200px); /* Ensure scrolling fits viewport */
   overflow-x: hidden;
+  padding-right: 5px;
+  padding-left: 3px;
 }
 
 .waypoint-box {

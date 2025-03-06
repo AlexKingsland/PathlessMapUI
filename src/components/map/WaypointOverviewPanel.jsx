@@ -33,22 +33,24 @@ const WaypointOverviewPanel = ({
       >
         {/* Route Metadata Section - Static */}
         <div className="map-metadata">
-            {route.map_image && (
-                <div className="map-image-container">
-                <img 
-                    src={route.map_image} 
-                    alt={route.title || "Map Image"} 
-                    className="map-image" 
-                />
-                </div>
-            )}
             <h2>{route.title || "Untitled Map"}</h2>
+            <div className="map-image-container">
+            <img 
+                src={
+                route.image_data
+                    ? `data:image/jpeg;base64,${route.image_data}` // Replace with image field from your route object
+                    : "https://via.placeholder.com/100" // Fallback placeholder
+                }
+                alt={route.title || "Map Image"} 
+                className="map-image" 
+            />
+            </div>
             <p>{route.description || "No description available"}</p>
             <p>
                 <strong>Creator:</strong> {route.creator || "Unknown"}
             </p>
             <p>
-                <strong>Total Waypoints:</strong> {route.waypoints.length}
+                <strong>Destinations:</strong> {route.waypoints.length}
             </p>
         </div>
 
