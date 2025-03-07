@@ -5,6 +5,7 @@ import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import RouteOverviewPanel from "./components/RouteOverviewPanel";
 import WaypointOverviewPanel from "./components/map/WaypointOverviewPanel";
+import UserProfile from "./components/user/UserProfile";
 import Navbar from "./components/Navbar";
 import { getRoutes } from "./waypoints";
 import { jwtDecode } from "jwt-decode";
@@ -324,6 +325,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/user/:alias" element={<UserProfile />} />
         <Route
           path="/map"
           element={

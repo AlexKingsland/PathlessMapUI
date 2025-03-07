@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/map/WaypointOverviewPanel.css";
 
 const WaypointOverviewPanel = ({
@@ -10,6 +11,18 @@ const WaypointOverviewPanel = ({
   togglePanel,
   waypointMarkerRefs,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCreatorClick = () => {
+    if (route.creator?.alias) {
+      console.log("Navigating to:", `/user/${route.creator.alias}`);  // Debug log
+      navigate(`/user/${route.creator.alias}`);
+    } else {
+      console.error("Alias is missing for creator:", route.creator);
+    }
+  };
+  
+
   const handleBoxHover = (index) => {
     const markerElement = waypointMarkerRefs.current[index];
     if (markerElement) {
@@ -33,7 +46,6 @@ const WaypointOverviewPanel = ({
       >
         {/* Route Metadata Section - Static */}
         <div className="map-metadata">
-            <h2>{route.title || "Untitled Map"}</h2>
             <div className="map-image-container">
             <img 
                 src={
@@ -45,12 +57,21 @@ const WaypointOverviewPanel = ({
                 className="map-image" 
             />
             </div>
-            <p>{route.description || "No description available"}</p>
+            <h2>{route.title || "Untitled Map"}</h2>
             <p>
-                <strong>Creator:</strong> {route.creator || "Unknown"}
+              <strong>Creator:</strong>{" "}
+              <span 
+                className="creator-link" 
+                onClick={() => handleCreatorClick()}
+              >
+                {route.creator.name || "Unknown"}
+              </span>
             </p>
             <p>
                 <strong>Destinations:</strong> {route.waypoints.length}
+            </p>
+            <p>
+                <strong>Description:</strong> {route.description || "No description available"}
             </p>
         </div>
 

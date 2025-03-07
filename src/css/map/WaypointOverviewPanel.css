@@ -154,3 +154,14 @@
 .panel-closed + .toggle-panel-tab {
   left: 5px;
 }
+
+.creator-link {
+  color: #8B5E3B; /* Pathless theme brown */
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.creator-link:hover {
+  color: #6D4C33; /* Darker brown on hover */
+}
