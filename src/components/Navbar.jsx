@@ -79,7 +79,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
         <button className="navbar-button logout-button" onClick={onPublish} disabled={userRoutes[0].waypoints.length === 0}>Publish</button>
       )}
       {(!isCreateMode && !currentlyShowingFilteredDownMaps) && (
-        <button className="navbar-button logout-button" onClick={onExplore}>Explore</button>
+        <button className="navbar-button global-view-button" onClick={onExplore}>Explore</button>
       )}
       </div>
 

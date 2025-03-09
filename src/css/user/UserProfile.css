@@ -1,57 +1,127 @@
+/* Overall Page Container */
 .profile-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
+    padding: 40px 20px;
     text-align: center;
+    background-color: #F7F1E7; /* Soft beige background */
+    color: #3C2F23; /* Dark brown text */
+    font-family: 'Segoe UI', sans-serif;
+    border-radius: 12px;
   }
   
+  /* Profile Header Section */
   .profile-header {
-    padding: 20px;
+    padding: 30px;
+    background-color: #E9D9C1; /* Light brown accent */
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   
   .profile-image {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #8B5E3B; /* Matches Pathless theme */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border: 5px solid #8B5E3B; /* Pathless brown */
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
+    margin-bottom: 15px;
+  }
+  
+  .profile-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4B3621;
+    margin-top: 10px;
   }
   
   .profile-bio {
     font-style: italic;
-    color: #666;
-    margin-top: 10px;
+    color: #5F4C3E;
+    margin-top: 12px;
+    font-size: 16px;
   }
   
+  /* Maps Section */
   .profile-maps {
     margin-top: 30px;
   }
   
-  .maps-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #6A4E38;
+    margin-bottom: 20px;
   }
   
+  /* Grid of Maps */
+  .maps-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+  }
+  
+  /* Map Cards */
   .map-card {
-    border-radius: 10px;
+    background: #FFFDF9;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
-    background: white;
-    transition: transform 0.2s;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s ease;
+    border: 1px solid #E0CBB5;
   }
   
   .map-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
   
   .map-card img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
+    border-bottom: 2px solid #8B5E3B;
   }
   
+  /* Map Details */
   .map-card h4 {
-    padding: 10px;
+    font-size: 18px;
+    color: #4B3621;
+    margin: 12px 12px 0 12px;
+  }
+  
+  .map-description {
+    font-size: 14px;
+    color: #6F5846;
+    margin: 6px 12px;
+  }
+  
+  .map-meta {
+    font-size: 14px;
+    color: #5F4C3E;
+    margin: 4px 12px;
+    text-align: left;
+  }
+
+  .back-button-container {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .back-button {
+    background-color: #8B5E3B;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-left: 10px;
+  }
+  
+  .back-button:hover {
+    background-color: #6A432A; /* Darker brown on hover */
   }
   

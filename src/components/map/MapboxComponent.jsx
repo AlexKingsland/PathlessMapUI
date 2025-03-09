@@ -6,50 +6,75 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
 const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible }) => {
+  const [isStyleLoaded, setIsStyleLoaded] = useState(false);
 
   useEffect(() => {
-    if (window.mapboxgl) {
+    if (window.mapboxgl && mapContainerRef.current) {
       window.mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
+  
       const newMap = new window.mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
         center: [0, 20],
         zoom: 1.5,
       });
-
+  
       newMap.addControl(new window.mapboxgl.NavigationControl());
-      setMap(newMap);
-
-      if (resetToTopLevelView) {
-        resetToTopLevelView(() => goToGlobalView(newMap));
-      }
+  
+      // Wait until style is fully loaded before doing anything else
+      newMap.on("style.load", () => {
+        console.log("✅ Map style loaded");
+        setMap(newMap); // only set map after style is ready
+  
+        if (resetToTopLevelView) {
+          resetToTopLevelView(() => goToGlobalView(newMap));
+        }
+      });
+  
+      return () => {
+        newMap.remove();
+      };
     }
   }, []);
+  
 
   useEffect(() => {
-    if (map) {
-      clearMap();
-      if (isCreateMode) {
-        setCurrentRouteIndex(0);
-        if (routes[0]) {
-          drawRoute(routes[0]);
-        }
-      } else if (isGlobalView) {
-        drawTopLevelMarkers();
-      } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
-        drawRoute(routes[currentRouteIndex]);
+    if (!map || !map.isStyleLoaded()) return; // prevent calling drawRoute too early
+  
+    clearMap();
+  
+    if (isCreateMode) {
+      setCurrentRouteIndex(0);
+      if (routes[0]) {
+        drawRoute(routes[0]);
       }
+    } else if (isGlobalView) {
+      drawTopLevelMarkers();
+    } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
+      drawRoute(routes[currentRouteIndex]);
     }
   }, [map, isGlobalView, currentRouteIndex, routes]);
+  
 
   const clearMap = () => {
-    if (map.getLayer("route")) map.removeLayer("route");
-    if (map.getSource("route-line")) map.removeSource("route-line");
-    document.querySelectorAll(".mapboxgl-marker").forEach((marker) => marker.remove());
-    resetHighlightedMarkers();
-    markerRefs.current = {};
+    try {
+      if (map && map.getLayer("route")) {
+        map.removeLayer("route");
+      }
+  
+      if (map && map.getSource("route-line")) {
+        map.removeSource("route-line");
+      }
+  
+      document.querySelectorAll(".mapboxgl-marker").forEach((marker) => marker.remove());
+  
+      resetHighlightedMarkers();
+      markerRefs.current = {};
+    } catch (err) {
+      console.warn("Error during map cleanup:", err);
+    }
   };
+  
 
   const drawTopLevelMarkers = () => {
     if (!routes || routes.length === 0) return;
