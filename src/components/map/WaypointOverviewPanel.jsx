@@ -21,7 +21,6 @@ const WaypointOverviewPanel = ({
       console.error("Alias is missing for creator:", route.creator);
     }
   };
-  
 
   const handleBoxHover = (index) => {
     const markerElement = waypointMarkerRefs.current[index];

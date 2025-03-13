@@ -6,7 +6,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
 const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible }) => {
-  const [isStyleLoaded, setIsStyleLoaded] = useState(false);
 
   useEffect(() => {
     if (window.mapboxgl && mapContainerRef.current) {
@@ -23,7 +22,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
   
       // Wait until style is fully loaded before doing anything else
       newMap.on("style.load", () => {
-        console.log("✅ Map style loaded");
+        console.log("Map style loaded");
         setMap(newMap); // only set map after style is ready
   
         if (resetToTopLevelView) {
@@ -39,20 +38,45 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
   
 
   useEffect(() => {
-    if (!map || !map.isStyleLoaded()) return; // prevent calling drawRoute too early
+    if (!map) return;
   
-    clearMap();
-  
-    if (isCreateMode) {
-      setCurrentRouteIndex(0);
-      if (routes[0]) {
-        drawRoute(routes[0]);
+    const runMapDrawing = () => {
+      console.log("Map style loaded, running drawing logic");
+      clearMap();
+
+      // Check if there is a selected route in local storage
+      const selectedMapId = localStorage.getItem("selectedRouteId");
+      if (selectedMapId && routes.length > 0) {
+        const matchingIndex = routes.findIndex((route) => route.id === parseInt(selectedMapId));
+        if (matchingIndex !== -1) {
+          setCurrentRouteIndex(matchingIndex);
+        }
+        localStorage.removeItem("selectedRouteId");
       }
-    } else if (isGlobalView) {
-      drawTopLevelMarkers();
-    } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
-      drawRoute(routes[currentRouteIndex]);
-    }
+  
+      if (isCreateMode) {
+        setCurrentRouteIndex(0);
+        if (routes[0]) {
+          drawRoute(routes[0]);
+        }
+      } else if (isGlobalView) {
+        drawTopLevelMarkers();
+      } else if (currentRouteIndex !== null && routes[currentRouteIndex]) {
+        drawRoute(routes[currentRouteIndex]);
+      }
+    };
+  
+    // 🛠 Style load checker polling loop
+    const waitForStyleLoad = () => {
+      if (map.isStyleLoaded()) {
+        runMapDrawing();
+      } else {
+        requestAnimationFrame(waitForStyleLoad); // keep checking until it's ready
+      }
+    };
+  
+    waitForStyleLoad(); // Start checking
+  
   }, [map, isGlobalView, currentRouteIndex, routes]);
   
 

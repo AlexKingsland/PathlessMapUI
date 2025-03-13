@@ -36,6 +36,11 @@ const UserProfile = () => {
   if (error) return <p className="error-message">{error}</p>;
   if (!user) return <p>User not found.</p>;
 
+  const handleViewMap = (mapId) => {
+    localStorage.setItem("selectedRouteId", mapId);
+    navigate("/map");
+  };  
+
   return (
     <div className="profile-container">
       {/* Back to Map Button */}
@@ -64,7 +69,7 @@ const UserProfile = () => {
         ) : (
           <div className="maps-list">
             {user.maps.map((map) => (
-              <div key={map.id} className="map-card">
+              <div key={map.id} className="map-card" onClick={() => handleViewMap(map.id)}>
                 <img src={map.image_data || "/placeholder.jpg"} alt={map.title} className="map-image"/>
                 <div className="map-details">
                   <h4 className="map-title">{map.title}</h4>
