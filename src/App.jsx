@@ -89,7 +89,19 @@ function App() {
   const handleHoverRoute = (index) => {
     if (map && exploreRoutes[index]) {
       const route = exploreRoutes[index];
-      const center = route.waypoints.length ? [route.waypoints[0].longitude, route.waypoints[0].latitude] : [0, 0];
+      // Calculate the center of the route
+      const total = route.waypoints.reduce(
+        (acc, wp) => {
+          acc.lat += wp.latitude;
+          acc.lon += wp.longitude;
+          return acc;
+        },
+        { lat: 0, lon: 0 }
+      );
+      console.log("Total:", total);
+      console.log("route.waypoints.length:", route.waypoints.length);
+      const center = [total.lon / route.waypoints.length, total.lat / route.waypoints.length];
+      console.log("Center:", center);
 
       resetHighlightedMarkers();
 
