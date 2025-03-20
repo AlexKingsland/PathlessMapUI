@@ -66,7 +66,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
       }
     };
   
-    // 🛠 Style load checker polling loop
+    // Style load checker polling loop
     const waitForStyleLoad = () => {
       if (map.isStyleLoaded()) {
         runMapDrawing();

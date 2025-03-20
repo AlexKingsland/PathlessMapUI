@@ -74,6 +74,7 @@
     border: 2px solid white;
     cursor: pointer;
     margin-top: 10px; /* Center thumb vertically */
+    margin-left: -2px;
     z-index: 3;
   }
   
