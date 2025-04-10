@@ -120,7 +120,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
 
   const handleAddWaypoint = () => {
     onAddWaypoint();
-    // setSelectedWaypoint(null); // clear selection so form resets
+    setSelectedWaypoint(null);
     setCurrentWaypoint({
       title: "",
       description: "",
@@ -157,7 +157,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
     <div>
       <div>
         <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
-          <h3>Add Waypoint</h3>
+          <h3>{selectedWaypoint ? "Edit Waypoint" : "Add Waypoint"}</h3>
           <button className="full-width-button" onClick={handleToggleInputMode}>
             {useGoogleSearch ? "Manual Input" : "Google Maps Input"}
           </button>
@@ -267,7 +267,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
 
           <div className="button-group">
             <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
-              Plot
+              {selectedWaypoint ? "Save" : "Plot"}
             </button>
             <button onClick={handleAddWaypoint} disabled={!isPlotted}>
               Next
