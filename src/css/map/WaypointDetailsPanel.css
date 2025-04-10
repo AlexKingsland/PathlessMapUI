@@ -1,12 +1,12 @@
 .waypoint-details-panel {
   position: fixed;
-  bottom: 10px; /* 10px gap from the bottom */
-  left: 10px;   /* 10px gap from the left */
-  right: 10px;  /* 10px gap from the right */
-  background-color: #f5efe6; /* Match waypoint form panel color */
+  bottom: 10px;
+  left: 25%;
+  right: 7%;
+  background-color: #f5efe6;
   padding: 20px;
   box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.15);
-  border-top-left-radius: 12px; /* Rounded corners at the top */
+  border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   z-index: 999;
   transition: transform 0.3s ease-in-out;

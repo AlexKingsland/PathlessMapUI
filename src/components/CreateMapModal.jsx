@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/CreateMapModal.css";
 
-const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
+const CreateMapModal = ({ onClose, onCreateMode, onEditMode, mode, defaultValues = {} }) => {
+
+  const formatImageData = (img) => {
+    if (!img) return null;
+    return img.startsWith("data:image/") ? img : `data:image/jpeg;base64,${img}`;
+  };
+  
   const [mapName, setMapName] = useState("");
   const [mapDescription, setMapDescription] = useState("");
   const [mapDuration, setMapDuration] = useState({ days: 0, hours: 0, minutes: 0 });
@@ -9,13 +16,25 @@ const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (mode === "edit" && defaultValues) {
+      setMapName(defaultValues.title || "");
+      setMapDescription(defaultValues.description || "");
+      setMapDuration(defaultValues.duration || { days: 0, hours: 0, minutes: 0 });
+      const parsedImage = formatImageData(defaultValues.image_data);
+      setImagePreview(parsedImage);
+    }
+  }, [defaultValues, mode]);
+
   const isFormValid =
     mapName.trim() &&
     mapDescription.trim() &&
-    mapDuration.days > 0 &&
+    mapDuration.days >= 0 &&
     mapDuration.hours >= 0 &&
     mapDuration.minutes >= 0 &&
-    mapImage;
+    (mapImage || imagePreview);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -49,7 +68,19 @@ const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isFormValid) {
-      onCreateMode(mapName, mapDescription, mapDuration, mapImage); // Call onCreateMode
+      if (mode === "edit") {
+        const newMapMetadata = {
+          mapId: defaultValues.id,
+          mapName,
+          mapDescription,
+          mapDuration,
+          mapImage: mapImage || imagePreview,
+        };
+        onEditMode(newMapMetadata);
+        navigate("/map");
+      } else {
+        onCreateMode(mapName, mapDescription, mapDuration, mapImage || imagePreview); // Call onCreateMode
+      }
       onClose(); // Close the modal
     }
   };
@@ -68,7 +99,7 @@ const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
           &times;
         </button>
         <form onSubmit={handleSubmit} className="create-map-form">
-          <h2 className="modal-title">Create Map</h2>
+          <h2 className="modal-title">{mode === "edit" ? "Edit Map" : "Create Map"}</h2>
 
           <label className="form-label">Map Name:</label>
           <input
@@ -131,7 +162,7 @@ const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
               type="file"
               accept="image/png, image/jpeg"
               onChange={handleImageChange}
-              required
+              required={!imagePreview}
             />
             {imageError && <p className="error-text">{imageError}</p>}
 
@@ -148,7 +179,7 @@ const CreateMapModal = ({ onClose, onCreateMode, toggleMenu }) => {
             className={`submit-map-button ${!isFormValid ? "disabled" : ""}`}
             disabled={!isFormValid}
           >
-            Enter Destinations
+            {mode === "edit" ? "Edit Destinations" : "Enter Destinations"}
           </button>
         </form>
       </div>

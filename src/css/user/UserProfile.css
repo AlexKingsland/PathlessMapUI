@@ -129,3 +129,28 @@
     background-color: #6A432A;
   }
   
+  .edit-map-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #8B5E3B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .edit-map-button:hover {
+    background-color: #6A432A;
+    transform: scale(1.05);
+  }
+  
+  .map-card.group:hover .edit-map-button {
+    display: block;
+  }
+  

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { useLoadScript } from "@react-google-maps/api";
 import "../../css/map/WaypointFormPanel.css";
 
 const libraries = ["places"];
 
-const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, togglePanel }) => {
+const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, togglePanel, setSelectedWaypoint, selectedWaypoint, userRoutes }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -19,7 +19,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
     longitude: "",
     tags: "",
     price: "",
-    image: null // Store the uploaded image
+    image: null
   });
 
   const [useGoogleSearch, setUseGoogleSearch] = useState(true);
@@ -27,6 +27,32 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
   const [isPlotted, setIsPlotted] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
+
+  useEffect(() => {
+    console.log("selectedWaypoint updated:", selectedWaypoint);
+    if (selectedWaypoint) {
+      setUseGoogleSearch(false);
+      setCurrentWaypoint({
+        title: selectedWaypoint.title || "",
+        description: selectedWaypoint.description || "",
+        info: selectedWaypoint.info || "",
+        latitude: selectedWaypoint.latitude ?? "",
+        longitude: selectedWaypoint.longitude ?? "",
+        tags: Array.isArray(selectedWaypoint.tags) ? selectedWaypoint.tags.join(", ") : selectedWaypoint.tags || "",
+        price: selectedWaypoint.price ?? "",
+        image: null,
+        image_data: selectedWaypoint.image_data || null
+      });
+      setImagePreview(
+        typeof selectedWaypoint.image_data === "string"
+          ? selectedWaypoint.image_data.startsWith("data:image/")
+            ? selectedWaypoint.image_data
+            : `data:image/jpeg;base64,${selectedWaypoint.image_data}`
+          : null
+      );
+      setIsPlotted(true);
+    }
+  }, [selectedWaypoint]);
 
   if (loadError) return <div>Error loading Google Maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -41,30 +67,30 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-  
+
     if (file) {
-      if (file.size > 2048 * 2048) { // 1MB size limit
+      if (file.size > 2048 * 2048) {
         setImageError("File size must be less than 1MB.");
-        setImagePreview(null); // Clear preview if there's an error
+        setImagePreview(null);
         return;
       }
-  
-      if (!file.type.startsWith("image/")) { // Validate file type
+
+      if (!file.type.startsWith("image/")) {
         setImageError("Invalid file type. Only JPEG and PNG are allowed.");
-        setImagePreview(null); // Clear preview if there's an error
+        setImagePreview(null);
         return;
       }
-  
-      setImageError(""); // Clear any previous error
+
+      setImageError("");
       setCurrentWaypoint((prev) => ({
         ...prev,
-        image_data: file // Store the file for later use
+        image_data: file
       }));
-  
+
       // Generate image preview
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Set the preview to the base64 string
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -94,6 +120,7 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
 
   const handleAddWaypoint = () => {
     onAddWaypoint();
+    // setSelectedWaypoint(null); // clear selection so form resets
     setCurrentWaypoint({
       title: "",
       description: "",
@@ -226,13 +253,11 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
             />
           </div>
 
-          {/* Image Upload Field */}
           <div className="image-upload-section">
             <label>Upload Image (Max 2MB)</label>
             <input type="file" accept="image/png, image/jpeg" onChange={handleFileChange} />
             {imageError && <p className="error-text">{imageError}</p>}
 
-            {/* Show Image Preview */}
             {imagePreview && (
               <div className="image-preview">
                 <img src={imagePreview} alt="Waypoint Preview" style={{ maxWidth: "100%", height: "auto" }} />
@@ -254,7 +279,6 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
         </div>
       </div>
     </div>
-
   );
 };
 

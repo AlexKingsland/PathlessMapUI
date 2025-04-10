@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import MapboxComponent from "./components/map/MapboxComponent";
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
@@ -21,6 +21,7 @@ function App() {
   const [exploreRoutes, setExploreRoutes] = useState([]); // State to hold explore routes
   const [userRoutes, setUserRoutes] = useState([]); // State to hold user routes
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
+  const [isEditMode, setIsEditMode] = useState(false); // Track if in edit mode
   const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
   const [waypointFormPanelVisible, setWaypointFormPanelVisible] = useState(false); // Track form panel visibility
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
@@ -32,8 +33,13 @@ function App() {
   const [isWaypointPanelOpen, setIsRouteWaypointPanelOpen] = useState(true);
   const [isCreateMapModalVisible, setIsCreateMapModalVisible] = useState(false);
   const [currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [editRoute, setEditRoute] = useState(null);
+
   const markerRefs = useRef({});
   const waypointMarkerRefs = useRef({});
+
+  //const navigate = useNavigate();
 
   useEffect(() => {
     fetchRoutes();
@@ -51,6 +57,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
+      setCurrentUser(decodedToken);
       const currentTime = Date.now() / 1000; // Current time in seconds
 
       if (decodedToken.exp < currentTime) {
@@ -212,6 +219,32 @@ function App() {
     }]);
   };
 
+  const handleSwitchToEditMode = (newMapMetadata) => {
+    setIsCreateMode(true);
+    setWaypointFormPanelVisible(true); // Open the waypoint panel
+    setShowBackToExploreButton(true);  // Show "Back to Explore"
+    setSelectedWaypoint(null);
+    setIsCreateMapModalVisible(false); // Close modal if open
+
+    const matchingIndex = exploreRoutes.findIndex((route) => route.id === parseInt(newMapMetadata.mapId));
+    const matchingRoute = exploreRoutes[matchingIndex];
+    console.log("newMapMetadata: ", newMapMetadata);
+    console.log("map id: ", newMapMetadata.mapId);
+    console.log("exploreRoutes: ", exploreRoutes);
+    // Update the route with the new metadata
+    const updatedRoute = {
+      ...matchingRoute,
+      title: newMapMetadata.mapName,
+      description: newMapMetadata.mapDescription,
+      duration: newMapMetadata.mapDuration,
+      map_image: newMapMetadata.mapImage,
+    };
+    // Set the route to be edited (this already has its waypoints)
+    setUserRoutes([updatedRoute]);
+    console.log("User Routes: ", userRoutes);
+  };
+  
+
   const resetHighlightedMarkers = () => {
     highlightedMarkersRef.current.forEach(marker => marker.remove());
     highlightedMarkersRef.current = [];
@@ -243,6 +276,79 @@ function App() {
       return updatedRoutes;
     });
   };
+
+
+  const handleSaveEdits = async () => {
+    try {
+      const route = userRoutes[0]; // Assuming single route in edit mode
+      console.log("Saving edits for route:", route);
+      const formData = new FormData();
+  
+      formData.append("title", route.title);
+      formData.append("description", route.description || "");
+      formData.append(
+        "duration",
+        `${route.duration.days || 0} days ${route.duration.hours || 0} hours ${route.duration.minutes || 0} minutes`
+      );
+      formData.append("tags", JSON.stringify(route.tags || []));
+      formData.append("price", route.price || 0.0);
+  
+      // Append map image
+      if (route.map_image) {
+        formData.append("map_image", route.map_image);
+      }
+  
+      // Append waypoints
+      formData.append(
+        "waypoints",
+        JSON.stringify(
+          route.waypoints.map((wp) => ({
+            title: wp.title,
+            description: wp.description || "",
+            info: wp.info || "",
+            latitude: wp.latitude,
+            longitude: wp.longitude,
+            tags: wp.tags || [],
+            price: wp.price || 0.0,
+            times_of_day: wp.times_of_day || null,
+            duration: wp.duration || null,
+            country: wp.country || null,
+          }))
+        )
+      );
+  
+      // Append waypoint images
+      route.waypoints.forEach((wp, idx) => {
+        if (wp.image_data) {
+          formData.append(`waypoint_image_${idx}`, wp.image_data);
+        }
+      });
+  
+      const response = await fetch(
+        `${import.meta.env.VITE_PATHLESS_BASE_URL}maps/${route.id}/update_with_waypoints`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to update map and waypoints");
+      }
+  
+      alert("Changes saved successfully!");
+      handleSwitchToExploreMode(); // Optionally return to explore mode
+    } catch (error) {
+      console.error("Error saving edits:", error);
+      alert("Failed to save map edits.");
+    }
+  
+    fetchRoutes(); // Refresh data
+  };
+  
 
   const handlePublish = async () => {
     try {
@@ -322,6 +428,7 @@ function App() {
     if (!myMapMode) {
       setCreateMapWaypointIndex(0);
       setIsCreateMode(false);
+      setIsEditMode(false);
       setSelectedWaypoint(null);
       setShowBackToExploreButton(false); // Hide "Back to Explore" button
       setCurrentlyShowingFilteredDownMaps(false); // Indicate we are now showing all maps without filter
@@ -337,7 +444,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/user/:alias" element={<UserProfile />} />
+        <Route path="/user/:alias" element={<UserProfile currentUser={currentUser} setIsEditMode={setIsEditMode} handleSwitchToEditMode={handleSwitchToEditMode}/>} />
         <Route
           path="/map"
           element={
@@ -357,6 +464,8 @@ function App() {
                   fetchRoutes={fetchRoutes}
                   currentlyShowingFilteredDownMaps={currentlyShowingFilteredDownMaps}
                   setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
+                  isEditMode={isEditMode}
+                  onSaveEdits={handleSaveEdits}
                 />
                 <MapboxComponent
                   routes={isCreateMode ? userRoutes : exploreRoutes}
@@ -386,6 +495,8 @@ function App() {
                   waypointMarkerRefs={waypointMarkerRefs}
                   isCreateMapModalVisible={isCreateMapModalVisible}
                   setIsCreateMapModalVisible={setIsCreateMapModalVisible}
+                  setUserRoutes={setUserRoutes}
+                  setCreateMapWaypointIndex={setCreateMapWaypointIndex}
                 />
                 {!isCreateMode && (
                 <>
@@ -408,6 +519,7 @@ function App() {
                       waypointMarkerRefs={waypointMarkerRefs}
                       isPanelOpen={isWaypointPanelOpen}
                       togglePanel={toggleWaypointPanel}
+                      setSelectedWaypoint={setSelectedWaypoint}
                     />
                   )}
                 </>

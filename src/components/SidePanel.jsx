@@ -114,7 +114,7 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
 
       {/* Show the CreateMapModal */}
       {isModalVisible && (
-        <CreateMapModal onClose={handleModalClose} onCreateMode={onCreateMode} toggleMenu={toggleMenu} />
+        <CreateMapModal onClose={handleModalClose} onCreateMode={onCreateMode} onEditMode={onCreateMode} mode={"create"} />
       )}
     </>
   );

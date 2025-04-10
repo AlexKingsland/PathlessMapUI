@@ -10,6 +10,7 @@ const WaypointOverviewPanel = ({
   isPanelOpen,
   togglePanel,
   waypointMarkerRefs,
+  setSelectedWaypoint,
 }) => {
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const WaypointOverviewPanel = ({
     } else {
       console.error("Alias is missing for creator:", route.creator);
     }
+    setSelectedWaypoint(null);
   };
 
   const handleBoxHover = (index) => {

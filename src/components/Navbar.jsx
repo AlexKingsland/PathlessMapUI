@@ -3,7 +3,7 @@ import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 import FilterPanel from "./FilterPanel";
 
-function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps }) {
+function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps, isEditMode, onSaveEdits }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const filterButtonRef = useRef(null);
@@ -75,13 +75,36 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
       </div>
 
       <div className="navbar-right">
-      {isCreateMode && (
-        <button className="navbar-button logout-button" onClick={onPublish} disabled={userRoutes[0].waypoints.length === 0}>Publish</button>
-      )}
-      {(!isCreateMode && !currentlyShowingFilteredDownMaps) && (
-        <button className="navbar-button global-view-button" onClick={onExplore}>Explore</button>
-      )}
+        {isCreateMode && !isEditMode && (
+          <button
+            className="navbar-button logout-button"
+            onClick={onPublish}
+            disabled={userRoutes[0].waypoints.length === 0}
+          >
+            Publish
+          </button>
+        )}
+
+        {isEditMode && (
+          <button
+            className="navbar-button logout-button"
+            onClick={onSaveEdits}
+            disabled={userRoutes[0].waypoints.length === 0}
+          >
+            Save Changes
+          </button>
+        )}
+
+        {!isCreateMode && !isEditMode && !currentlyShowingFilteredDownMaps && (
+          <button
+            className="navbar-button global-view-button"
+            onClick={onExplore}
+          >
+            Explore
+          </button>
+        )}
       </div>
+
 
       <SidePanel
         onLogout={onLogout}
