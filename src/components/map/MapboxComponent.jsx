@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, addWaypointToUserRoutes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, setCreateMapWaypointIndex }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, isFormPanelVisible, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex }) => {
 
   useEffect(() => {
     if (window.mapboxgl && mapContainerRef.current) {
@@ -198,7 +198,6 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
       />)}
       {isCreateMode && (
         <WaypointFormPanel
-          onAddWaypoint={addWaypointToUserRoutes}
           onUpdateWaypoint={onUpdateWaypoint}
           isPanelOpen={waypointFormPanelVisible}
           togglePanel={toggleWaypointFormPanel}
@@ -207,7 +206,9 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
           setSelectedWaypoint={setSelectedWaypoint}
           selectedWaypoint={selectedWaypoint}
           userRoutes={routes}
-          setCreateMapWaypointIndex={setCurrentRouteIndex}
+          setUserRoutes={setUserRoutes}
+          createMapWaypointIndex={createMapWaypointIndex}
+          setCreateMapWaypointIndex={setCreateMapWaypointIndex}
         />
       )}
     </div>

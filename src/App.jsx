@@ -34,7 +34,6 @@ function App() {
   const [isCreateMapModalVisible, setIsCreateMapModalVisible] = useState(false);
   const [currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [editRoute, setEditRoute] = useState(null);
 
   const markerRefs = useRef({});
   const waypointMarkerRefs = useRef({});
@@ -250,11 +249,6 @@ function App() {
     highlightedMarkersRef.current = [];
   };
 
-  // Function to add a waypoint to their route
-  const addWaypointToUserRoutes = () => {
-    setCreateMapWaypointIndex((prevIndex) => prevIndex + 1);
-  };
-
   // Function to update a waypoint in the first route (index 0) by waypoint index
   const handleUpdateWaypoint = (waypoint) => {
     setUserRoutes((prevRoutes) => {
@@ -264,8 +258,8 @@ function App() {
       } else if (updatedRoutes.length >= -1 && updatedRoutes[0].waypoints.length > createMapWaypointIndex) {
         const route = updatedRoutes[0];
         
-        // Update the waypoint at the given createMapWaypointIndex
-        route.waypoints[createMapWaypointIndex] = waypoint;
+        // Insert at createMapWaypointIndex, shifting existing ones forward
+        route.waypoints.splice(createMapWaypointIndex, 0, waypoint);route.waypoints[createMapWaypointIndex] = waypoint;
 
         updatedRoutes[0] = route;
         console.log(`Updated waypoint at index ${createMapWaypointIndex}:`, waypoint);
@@ -472,7 +466,6 @@ function App() {
                   resetToTopLevelView={setGoToTopLevelView}
                   toggleGlobalView={toggleGlobalView}
                   isGlobalView={isGlobalView}
-                  addWaypointToUserRoutes={addWaypointToUserRoutes}
                   isFormPanelVisible={isFormPanelVisible}
                   waypointFormPanelVisible={waypointFormPanelVisible}
                   toggleWaypointFormPanel={toggleWaypointFormPanel}
@@ -496,6 +489,7 @@ function App() {
                   isCreateMapModalVisible={isCreateMapModalVisible}
                   setIsCreateMapModalVisible={setIsCreateMapModalVisible}
                   setUserRoutes={setUserRoutes}
+                  createMapWaypointIndex={createMapWaypointIndex}
                   setCreateMapWaypointIndex={setCreateMapWaypointIndex}
                 />
                 {!isCreateMode && (

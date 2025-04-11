@@ -91,7 +91,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
             onClick={onSaveEdits}
             disabled={userRoutes[0].waypoints.length === 0}
           >
-            Save Changes
+            Publish Changes
           </button>
         )}
 

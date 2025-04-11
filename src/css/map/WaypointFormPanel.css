@@ -71,14 +71,14 @@
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
 
 .button-group button {
-  flex: 1;
   padding: 12px;
+  flex: 1 1 calc(50% - 5px); /* Two buttons per row */
   font-size: 14px;
   font-weight: bold;
   border: none;
@@ -87,6 +87,10 @@
   transition: background-color 0.3s ease, color 0.3s ease;
   color: #fff;
   background-color: #8b5e3c;
+}
+
+.button-group button:nth-child(3) {
+  flex: 1 1 100%; /* Make the third button full width on a new row */
 }
 
 .button-group button:hover {

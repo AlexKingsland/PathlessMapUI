@@ -5,7 +5,7 @@ import "../../css/map/WaypointFormPanel.css";
 
 const libraries = ["places"];
 
-const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, togglePanel, setSelectedWaypoint, selectedWaypoint, userRoutes }) => {
+const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSelectedWaypoint, selectedWaypoint, userRoutes, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -118,8 +118,9 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
     }
   };
 
-  const handleAddWaypoint = () => {
-    onAddWaypoint();
+  const handleSetNewWaypoint = () => {
+    setUseGoogleSearch(true);
+    setCreateMapWaypointIndex((prevIndex) => prevIndex + 1);
     setSelectedWaypoint(null);
     setCurrentWaypoint({
       title: "",
@@ -137,7 +138,41 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
   };
 
   const handleUpdateWaypoint = () => {
-    console.log("Current Waypoint being updated:", currentWaypoint);
+    if (selectedWaypoint) {
+      const updatedWaypoint = {
+        ...selectedWaypoint,
+        title: currentWaypoint.title,
+        description: currentWaypoint.description,
+        info: currentWaypoint.info,
+        latitude: parseFloat(currentWaypoint.latitude),
+        longitude: parseFloat(currentWaypoint.longitude),
+        tags: Array.isArray(currentWaypoint.tags) ? currentWaypoint.tags.join(", ") : currentWaypoint.tags,
+        price: parseFloat(currentWaypoint.price),
+        image_data: currentWaypoint.image_data
+      };
+      console.log("Old waypoints:", userRoutes[0].waypoints);
+      const newWaypoints = userRoutes[0].waypoints.map((wp) =>
+        wp.id === selectedWaypoint.id ? updatedWaypoint : wp
+      );
+      setUserRoutes([{
+        ...userRoutes[0],
+        waypoints: newWaypoints
+      }]);
+      console.log("Updated waypoints:", newWaypoints);
+      setSelectedWaypoint(updatedWaypoint);
+      setCurrentWaypoint(updatedWaypoint);
+      setImagePreview(
+        typeof updatedWaypoint.image_data === "string"
+          ? updatedWaypoint.image_data.startsWith("data:image/")
+            ? updatedWaypoint.image_data
+            : `data:image/jpeg;base64,${updatedWaypoint.image_data}`
+          : null
+      );
+      setIsPlotted(true);
+    }
+  };
+
+  const handleAddWaypoint = () => {
     onUpdateWaypoint({
       ...currentWaypoint,
       latitude: parseFloat(currentWaypoint.latitude),
@@ -145,7 +180,19 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
       price: parseFloat(currentWaypoint.price)
     });
     setIsPlotted(true);
+    setSelectedWaypoint(userRoutes[0].waypoints[createMapWaypointIndex]);
   };
+
+  const handleDeleteWaypoint = () => {
+    if (selectedWaypoint) {
+      const newWaypoints = userRoutes[0].waypoints.filter((wp) => wp.id !== selectedWaypoint.id);
+      setUserRoutes([{
+        ...userRoutes[0],
+        waypoints: newWaypoints
+      }]);
+      setSelectedWaypoint(null);
+    }
+  }
 
   const handleToggleInputMode = () => {
     setUseGoogleSearch((prev) => !prev);
@@ -266,12 +313,17 @@ const WaypointFormPanel = ({ onAddWaypoint, onUpdateWaypoint, isPanelOpen, toggl
           </div>
 
           <div className="button-group">
-            <button onClick={handleUpdateWaypoint} disabled={isPlotButtonDisabled}>
+            <button onClick={selectedWaypoint ? handleUpdateWaypoint : handleAddWaypoint} disabled={isPlotButtonDisabled}>
               {selectedWaypoint ? "Save" : "Plot"}
             </button>
-            <button onClick={handleAddWaypoint} disabled={!isPlotted}>
-              Next
+            <button onClick={handleDeleteWaypoint} disabled={!selectedWaypoint}>
+              Delete
             </button>
+            {selectedWaypoint && (
+              <button onClick={handleSetNewWaypoint} disabled={!isPlotted}>
+                Add Next Waypoint
+              </button>
+            )}
           </div>
         </div>
         <div className="toggle-tab" onClick={togglePanel}>
