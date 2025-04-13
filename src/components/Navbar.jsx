@@ -3,7 +3,7 @@ import "../css/Navbar.css";
 import SidePanel from "./SidePanel";
 import FilterPanel from "./FilterPanel";
 
-function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps, isEditMode, onSaveEdits }) {
+function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isCreateMode, createMapName, onPublish, currentRoute, onExplore, userRoutes, fetchRoutes, currentlyShowingFilteredDownMaps, setCurrentlyShowingFilteredDownMaps, isEditMode, onSaveEdits, currentUser }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const filterButtonRef = useRef(null);
@@ -114,6 +114,7 @@ function Navbar({ onLogout, showHomeButton, onBackToExplore, onBackToCreate, isC
         menuButtonRef={menuButtonRef}
         fetchRoutes={fetchRoutes}
         setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
+        currentUser={currentUser}
       />
     </nav>
   );

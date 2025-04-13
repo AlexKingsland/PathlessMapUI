@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CreateMapModal from "./CreateMapModal"; // Import the modal component
 import "../css/SidePanel.css";
 
-function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes, setCurrentlyShowingFilteredDownMaps }) {
+function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes, setCurrentlyShowingFilteredDownMap, currentUser }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const panelRef = useRef(null);
@@ -86,18 +86,15 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
   return (
     <>
       <div ref={panelRef} className={`side-pane ${isMenuOpen ? "open" : ""}`}>
-        <button className="side-pane-button" onClick={() => navigate("/profile")}>
+        <button className="side-pane-button" onClick={() => navigate(`/user/${currentUser.sub.alias}`)}>
           Pathless Profile
-        </button>
-        <button className="side-pane-button" onClick={() => navigate("/account-details")}>
-          Account Details
         </button>
         <button className="side-pane-button" onClick={handleFetchMyMaps}>
           My Maps
         </button>
-        <button className="side-pane-button" onClick={() => navigate("/saved-maps")}>
+        {/* <button className="side-pane-button" onClick={() => navigate("/saved-maps")}>
           Saved Maps
-        </button>
+        </button> */}
 
         <div className="create-map-container">
           <button className="side-pane-button create-map-button" onClick={handleCreateMapClick}>

@@ -460,6 +460,7 @@ function App() {
                   setCurrentlyShowingFilteredDownMaps={setCurrentlyShowingFilteredDownMaps}
                   isEditMode={isEditMode}
                   onSaveEdits={handleSaveEdits}
+                  currentUser={currentUser}
                 />
                 <MapboxComponent
                   routes={isCreateMode ? userRoutes : exploreRoutes}
