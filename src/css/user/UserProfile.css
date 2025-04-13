@@ -66,6 +66,8 @@
   
   /* Map Cards */
   .map-card {
+    position: relative;
+    overflow: hidden;
     background: #FFFDF9;
     border-radius: 12px;
     overflow: hidden;
@@ -132,22 +134,6 @@
     transform: scale(1.05);
   }
   
-  .edit-map-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #8B5E3B;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
   .edit-profile-button {
     position: absolute;
     top: 10px;
@@ -172,6 +158,26 @@
     background-color: #6A432A;
     transform: scale(1.05);
   }
+
+  .edit-map-button,
+  .delete-map-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #8b5e3c;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .delete-map-button:hover {
+    background-color: #912d25;
+    transform: scale(1.05);
+  }
+  
   
   .map-card.group:hover .edit-map-button {
     display: block;
@@ -199,4 +205,88 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .map-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .map-card:hover .map-buttons {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Modal overlay */
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(97, 66, 42, 0.6); /* brownish transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1300;
+}
+
+/* Modal box */
+.delete-confirm-content {
+  background-color: #f5efe6;
+  padding: 30px 25px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #61422a;
+  font-size: 16px;
+}
+
+/* Buttons container */
+.delete-confirm-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Confirm and cancel buttons */
+.confirm-delete,
+.cancel-delete {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-delete {
+  background-color: #b6382c; /* red tone */
+  color: #fff;
+}
+
+.confirm-delete:hover {
+  background-color: #8e241c;
+}
+
+.cancel-delete {
+  background-color: #d4c2b2;
+  color: #61422a;
+}
+
+.cancel-delete:hover {
+  background-color: #c2ae9a;
+}
+
+  
   

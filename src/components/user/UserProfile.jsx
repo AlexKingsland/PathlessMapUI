@@ -13,6 +13,7 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [selectedMap, setSelectedMap] = useState(null);
+  const [mapToDelete, setMapToDelete] = useState(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_PATHLESS_BASE_URL}/auth/user/${alias}`)
@@ -93,7 +94,23 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
       console.error("Error refreshing user profile:", err);
     }
   };
-  
+
+  const handleDeleteMap = async () => {
+    if (!mapToDelete) return;
+    try {
+      const res = await fetch(`${import.meta.env.VITE_PATHLESS_BASE_URL}/maps/${mapToDelete}/delete`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to delete map");
+      setMapToDelete(null);
+      refreshUserProfile();
+    } catch (err) {
+      console.error("Error deleting map:", err);
+    }
+  };
 
   return (
     <div className="profile-container">
@@ -159,12 +176,23 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
                 </div>
 
                 {currentUser?.sub?.alias === alias && (
+                  <div className="map-buttons">
                   <button
                     className="edit-map-button"
                     onClick={(e) => handleEditMap(map.id, e)}
                   >
                     ✎ Edit
                   </button>
+                  <button
+                    className="delete-map-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMapToDelete(map.id);
+                    }}
+                  >
+                    🗑 Delete
+                  </button>
+                </div>
                 )}
               </div>
             ))}
@@ -192,6 +220,18 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
           onClose={() => setIsEditingProfile(false)}
           refreshUserProfile={refreshUserProfile}
         />
+      )}
+
+      {mapToDelete && (
+        <div className="delete-confirm-modal">
+          <div className="delete-confirm-content">
+            <p>Are you sure you want to delete this map?</p>
+            <div className="delete-confirm-buttons">
+              <button className="confirm-delete" onClick={handleDeleteMap}>Yes</button>
+              <button className="cancel-delete" onClick={() => setMapToDelete(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>
