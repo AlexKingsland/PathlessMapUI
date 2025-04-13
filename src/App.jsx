@@ -438,7 +438,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/user/:alias" element={<UserProfile currentUser={currentUser} setIsEditMode={setIsEditMode} handleSwitchToEditMode={handleSwitchToEditMode} setCreateMapName={setCreateMapName}/>} />
+        <Route path="/user/:alias" element={<UserProfile currentUser={currentUser} setIsEditMode={setIsEditMode} handleSwitchToEditMode={handleSwitchToEditMode} setCreateMapName={setCreateMapName} fetchRoutes={fetchRoutes}/>} />
         <Route
           path="/map"
           element={

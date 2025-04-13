@@ -4,7 +4,7 @@ import CreateMapModal from "../CreateMapModal";
 import EditUserProfile from "./EditUserProfile";
 import "../../css/user/UserProfile.css";
 
-export default function UserProfile({ currentUser, setIsEditMode, handleSwitchToEditMode, setCreateMapName }) {
+export default function UserProfile({ currentUser, setIsEditMode, handleSwitchToEditMode, setCreateMapName, fetchRoutes }) {
   const { alias } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -107,6 +107,7 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
       if (!res.ok) throw new Error("Failed to delete map");
       setMapToDelete(null);
       refreshUserProfile();
+      fetchRoutes(); // Update the map list in the parent component
     } catch (err) {
       console.error("Error deleting map:", err);
     }
