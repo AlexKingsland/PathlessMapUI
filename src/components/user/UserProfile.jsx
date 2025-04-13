@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CreateMapModal from "../CreateMapModal";
+import EditUserProfile from "./EditUserProfile";
 import "../../css/user/UserProfile.css";
 
 export default function UserProfile({ currentUser, setIsEditMode, handleSwitchToEditMode, setCreateMapName }) {
@@ -10,6 +11,7 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [selectedMap, setSelectedMap] = useState(null);
 
   useEffect(() => {
@@ -30,7 +32,14 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
       });
   }, [alias]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="pathless-spinner"></div>
+        <p style={{ marginLeft: "15px", color: "#8b5e3c", fontWeight: "bold" }}>Fetching maps...</p>
+      </div>
+    );
+  }  
   if (error) return <p className="error-message">{error}</p>;
   if (!user) return <p>User not found.</p>;
 
@@ -38,6 +47,11 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
     localStorage.setItem("selectedRouteId", mapId);
     navigate("/map");
   };
+
+  const handleEditProfile = () => {
+    setIsEditingProfile(true);
+    console.log("isEditingProfile", isEditingProfile);
+   }
 
   const handleEditMap = (mapId, e) => {
     e.stopPropagation();
@@ -69,6 +83,18 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
     setCreateMapName(map.title);
   };
 
+  const refreshUserProfile = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_PATHLESS_BASE_URL}/auth/user/${alias}`);
+      if (!res.ok) throw new Error("Failed to fetch user");
+      const data = await res.json();
+      setUser(data);
+    } catch (err) {
+      console.error("Error refreshing user profile:", err);
+    }
+  };
+  
+
   return (
     <div className="profile-container">
       <div className="back-button-container">
@@ -76,20 +102,35 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
       </div>
 
       <div className="profile-header">
+        {currentUser?.sub?.alias === alias && (
+          <button
+            className="edit-profile-button"
+            onClick={handleEditProfile}
+          >
+            ✎ Edit Profile
+          </button>
+        )}
         <img
-          src={user.image_data?.startsWith("data:image/") ? user.image_data : "/default-avatar.png"}
+          src={
+            user.image_data
+              ? user.image_data.startsWith("data:image/")
+                ? user.image_data
+                : `data:image/jpeg;base64,${user.image_data}`
+              : "/default-avatar.png"
+          }
           alt={user.name}
           className="profile-image"
         />
+
         <h2 className="profile-name">{user.name}</h2>
         <p className="profile-bio">{user.bio || "No bio available."}</p>
       </div>
 
       <div className="profile-maps">
-        <h3 className="section-title">Created Maps</h3>
-        {user.maps.length === 0 ? (
+      <h3 className="section-title">Created Maps</h3>
+        {Array.isArray(user?.maps) && user.maps.length === 0 ? (
           <p className="no-maps">No maps created yet.</p>
-        ) : (
+        ) : Array.isArray(user?.maps) ? (
           <div className="maps-list">
             {user.maps.map((map) => (
               <div
@@ -128,6 +169,8 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
               </div>
             ))}
           </div>
+        ) : (
+          <p className="no-maps">Loading map data...</p>
         )}
       </div>
 
@@ -142,6 +185,15 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
           }}
         />
       )}
+
+      {isEditingProfile && (
+        <EditUserProfile
+          user={user}
+          onClose={() => setIsEditingProfile(false)}
+          refreshUserProfile={refreshUserProfile}
+        />
+      )}
+
     </div>
   );
 }

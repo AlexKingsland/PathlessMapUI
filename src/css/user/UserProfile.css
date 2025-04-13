@@ -13,6 +13,7 @@
   
   /* Profile Header Section */
   .profile-header {
+    position: relative;
     padding: 30px;
     background-color: #f1e1cc;
     border-radius: 12px;
@@ -123,10 +124,12 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
     margin-left: 10px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
   
   .back-button:hover {
     background-color: #6A432A;
+    transform: scale(1.05);
   }
   
   .edit-map-button {
@@ -144,6 +147,26 @@
     display: none;
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
+
+  .edit-profile-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #8B5E3B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .edit-profile-button:hover {
+    background-color: #6A432A;
+    transform: scale(1.05);
+  }
   
   .edit-map-button:hover {
     background-color: #6A432A;
@@ -152,5 +175,28 @@
   
   .map-card.group:hover .edit-map-button {
     display: block;
+  }
+  
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    gap: 10px;
+    font-size: 18px;
+  }  
+  
+  .pathless-spinner {
+    border: 6px solid #f3e9dc;
+    border-top: 6px solid #8b5e3c; /* pathless brown */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   
