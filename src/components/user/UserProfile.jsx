@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CreateMapModal from "../CreateMapModal";
 import "../../css/user/UserProfile.css";
 
-export default function UserProfile({ currentUser, setIsEditMode, handleSwitchToEditMode }) {
+export default function UserProfile({ currentUser, setIsEditMode, handleSwitchToEditMode, setCreateMapName }) {
   const { alias } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -66,6 +66,7 @@ export default function UserProfile({ currentUser, setIsEditMode, handleSwitchTo
     setSelectedMap(parsedMap);
     setIsEditModalOpen(true);
     setIsEditMode(true);
+    setCreateMapName(map.title);
   };
 
   return (

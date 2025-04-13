@@ -438,7 +438,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/user/:alias" element={<UserProfile currentUser={currentUser} setIsEditMode={setIsEditMode} handleSwitchToEditMode={handleSwitchToEditMode}/>} />
+        <Route path="/user/:alias" element={<UserProfile currentUser={currentUser} setIsEditMode={setIsEditMode} handleSwitchToEditMode={handleSwitchToEditMode} setCreateMapName={setCreateMapName}/>} />
         <Route
           path="/map"
           element={
@@ -466,7 +466,6 @@ function App() {
                   resetToTopLevelView={setGoToTopLevelView}
                   toggleGlobalView={toggleGlobalView}
                   isGlobalView={isGlobalView}
-                  isFormPanelVisible={isFormPanelVisible}
                   waypointFormPanelVisible={waypointFormPanelVisible}
                   toggleWaypointFormPanel={toggleWaypointFormPanel}
                   isCreateMode={isCreateMode}
