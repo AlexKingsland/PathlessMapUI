@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { calculateCenter } from "../../waypoints";
 import WaypointDetailsPanel from "./WaypointDetailsPanel";
 import "../../css/map/MapboxComponent.css";

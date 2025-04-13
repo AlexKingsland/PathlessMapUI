@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CreateMapModal from "./CreateMapModal"; // Import the modal component
 import "../css/SidePanel.css";
 
-function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes, setCurrentlyShowingFilteredDownMap, currentUser }) {
+function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonRef, fetchRoutes, setCurrentlyShowingFilteredDownMaps, currentUser }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const panelRef = useRef(null);
@@ -27,7 +27,6 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Clean up event listener on component unmount
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -40,12 +39,12 @@ function SidePanel({ onLogout, isMenuOpen, toggleMenu, onCreateMode, menuButtonR
   };
 
   const handleCreateMapClick = () => {
-    setIsModalVisible(true); // Show the modal
-    toggleMenu(false); // Automatically close the side panel
+    setIsModalVisible(true);
+    toggleMenu(false);
   };
 
   const handleModalClose = () => {
-    setIsModalVisible(false); // Close the modal
+    setIsModalVisible(false);
   };
 
   const fetchUserId = () => {

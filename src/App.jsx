@@ -22,7 +22,6 @@ function App() {
   const [userRoutes, setUserRoutes] = useState([]); // State to hold user routes
   const [isCreateMode, setIsCreateMode] = useState(false); // Track if showing user-created routes
   const [isEditMode, setIsEditMode] = useState(false); // Track if in edit mode
-  const [isFormPanelVisible, setIsFormPanelVisible] = useState(false); // Track form panel visibility
   const [waypointFormPanelVisible, setWaypointFormPanelVisible] = useState(false); // Track form panel visibility
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
   const [createMapName, setCreateMapName] = useState(""); // Track map name
@@ -201,10 +200,10 @@ function App() {
 
   // Function to switch to create mode and open the form panel
   const handleSwitchToCreateMode = (createMapName, mapDescription, mapDuration, mapImage) => {
-    setCreateMapName(createMapName); // Set the map name
+    setCreateMapName(createMapName);
     setIsCreateMode(true);
-    setWaypointFormPanelVisible(true); // Show the form panel
-    setShowBackToExploreButton(true); // Show "Back to Explore" button
+    setWaypointFormPanelVisible(true);
+    setShowBackToExploreButton(true);
     setSelectedWaypoint(null);
     setIsCreateMapModalVisible(false);
 
@@ -220,10 +219,10 @@ function App() {
 
   const handleSwitchToEditMode = (newMapMetadata) => {
     setIsCreateMode(true);
-    setWaypointFormPanelVisible(true); // Open the waypoint panel
-    setShowBackToExploreButton(true);  // Show "Back to Explore"
+    setWaypointFormPanelVisible(true);
+    setShowBackToExploreButton(true);
     setSelectedWaypoint(null);
-    setIsCreateMapModalVisible(false); // Close modal if open
+    setIsCreateMapModalVisible(false);
 
     const matchingIndex = exploreRoutes.findIndex((route) => route.id === parseInt(newMapMetadata.mapId));
     const matchingRoute = exploreRoutes[matchingIndex];
@@ -396,7 +395,7 @@ function App() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Authorization token
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: formData,
         }
@@ -407,7 +406,7 @@ function App() {
       }
   
       alert("Map and waypoints published successfully!");
-      handleSwitchToExploreMode(); // Switch to explore mode after publishing
+      handleSwitchToExploreMode();
     } catch (error) {
       console.error("Error publishing map and waypoints:", error);
       alert("Failed to publish map and waypoints.");
@@ -424,8 +423,8 @@ function App() {
       setIsCreateMode(false);
       setIsEditMode(false);
       setSelectedWaypoint(null);
-      setShowBackToExploreButton(false); // Hide "Back to Explore" button
-      setCurrentlyShowingFilteredDownMaps(false); // Indicate we are now showing all maps without filter
+      setShowBackToExploreButton(false);
+      setCurrentlyShowingFilteredDownMaps(false);
     }
     if (reloadAllMaps) {
       fetchRoutes();
