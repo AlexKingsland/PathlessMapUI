@@ -152,7 +152,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
       };
       console.log("Old waypoints:", userRoutes[0].waypoints);
       const newWaypoints = userRoutes[0].waypoints.map((wp) =>
-        wp.id === selectedWaypoint.id ? updatedWaypoint : wp
+        wp.title === selectedWaypoint.title ? updatedWaypoint : wp
       );
       setUserRoutes([{
         ...userRoutes[0],
@@ -185,7 +185,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
 
   const handleDeleteWaypoint = () => {
     if (selectedWaypoint) {
-      const newWaypoints = userRoutes[0].waypoints.filter((wp) => wp.id !== selectedWaypoint.id);
+      const newWaypoints = userRoutes[0].waypoints.filter((wp) => wp.title !== selectedWaypoint.title);
       setUserRoutes([{
         ...userRoutes[0],
         waypoints: newWaypoints

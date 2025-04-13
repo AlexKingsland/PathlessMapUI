@@ -259,7 +259,7 @@ function App() {
         const route = updatedRoutes[0];
         
         // Insert at createMapWaypointIndex, shifting existing ones forward
-        route.waypoints.splice(createMapWaypointIndex, 0, waypoint);route.waypoints[createMapWaypointIndex] = waypoint;
+        route.waypoints.splice(createMapWaypointIndex, 0, waypoint);
 
         updatedRoutes[0] = route;
         console.log(`Updated waypoint at index ${createMapWaypointIndex}:`, waypoint);
