@@ -490,6 +490,7 @@ function App() {
                   setUserRoutes={setUserRoutes}
                   createMapWaypointIndex={createMapWaypointIndex}
                   setCreateMapWaypointIndex={setCreateMapWaypointIndex}
+                  handleSelectRoute={handleSelectRoute}
                 />
                 {!isCreateMode && (
                 <>

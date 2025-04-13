@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex, handleSelectRoute }) => {
 
   useEffect(() => {
     if (window.mapboxgl && mapContainerRef.current) {
@@ -46,12 +46,14 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
 
       // Check if there is a selected route in local storage
       const selectedMapId = localStorage.getItem("selectedRouteId");
+      console.log("Selected map ID from local storage:", selectedMapId);
       if (selectedMapId && routes.length > 0) {
         const matchingIndex = routes.findIndex((route) => route.id === parseInt(selectedMapId));
         if (matchingIndex !== -1) {
-          setCurrentRouteIndex(matchingIndex);
+          handleSelectRoute(matchingIndex);
+          drawRoute(routes[matchingIndex]);
+          localStorage.removeItem("selectedRouteId");
         }
-        localStorage.removeItem("selectedRouteId");
       }
   
       if (isCreateMode) {

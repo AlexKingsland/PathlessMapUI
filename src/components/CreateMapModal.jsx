@@ -160,7 +160,7 @@ const CreateMapModal = ({ onClose, onCreateMode, onEditMode, mode, defaultValues
           <div className="image-upload">
             <input
               type="file"
-              accept="image/png, image/jpeg"
+              accept="image*"
               onChange={handleImageChange}
               required={!imagePreview}
             />
