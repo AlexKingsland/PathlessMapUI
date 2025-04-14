@@ -43,13 +43,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
         image: null,
         image_data: selectedWaypoint.image_data || null
       });
-      setImagePreview(
-        typeof selectedWaypoint.image_data === "string"
-          ? selectedWaypoint.image_data.startsWith("data:image/")
-            ? selectedWaypoint.image_data
-            : `data:image/jpeg;base64,${selectedWaypoint.image_data}`
-          : null
-      );
+      updateImagePreview(selectedWaypoint.image_data);
       setIsPlotted(true);
     }
   }, [selectedWaypoint]);
@@ -137,6 +131,27 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
     setImagePreview(null);
   };
 
+  const updateImagePreview = (imageData) => {
+    if (!imageData) {
+      setImagePreview(null);
+      return;
+    }
+  
+    if (typeof imageData === "string") {
+      setImagePreview(
+        imageData.startsWith("data:image/")
+          ? imageData
+          : `data:image/jpeg;base64,${imageData}`
+      );
+    } else if (imageData instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(imageData);
+    }
+  }
+
   const handleUpdateWaypoint = () => {
     if (selectedWaypoint) {
       const updatedWaypoint = {
@@ -161,13 +176,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
       console.log("Updated waypoints:", newWaypoints);
       setSelectedWaypoint(updatedWaypoint);
       setCurrentWaypoint(updatedWaypoint);
-      setImagePreview(
-        typeof updatedWaypoint.image_data === "string"
-          ? updatedWaypoint.image_data.startsWith("data:image/")
-            ? updatedWaypoint.image_data
-            : `data:image/jpeg;base64,${updatedWaypoint.image_data}`
-          : null
-      );
+      updateImagePreview(updatedWaypoint.image_data);
       setIsPlotted(true);
     }
   };
@@ -204,7 +213,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
     <div>
       <div>
         <div className={`waypoint-form-panel ${isPanelOpen ? 'open' : 'closed'}`}>
-          <h3>{selectedWaypoint ? "Edit Waypoint" : "Add Waypoint"}</h3>
+          <h3>{selectedWaypoint ? "Edit Destination" : "Add Destination"}</h3>
           <button className="full-width-button" onClick={handleToggleInputMode}>
             {useGoogleSearch ? "Manual Input" : "Google Maps Input"}
           </button>
@@ -321,7 +330,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
             </button>
             {selectedWaypoint && (
               <button onClick={handleSetNewWaypoint} disabled={!isPlotted}>
-                Add Next Waypoint
+                Add Successive Destination
               </button>
             )}
           </div>
