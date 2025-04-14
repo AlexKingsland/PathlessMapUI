@@ -60,21 +60,24 @@
   /* Grid of Maps */
   .maps-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, minmax(260px, 1fr)); /* Always 3 per row */
     gap: 25px;
   }
   
   /* Map Cards */
   .map-card {
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: #FFFDF9;
     border-radius: 12px;
-    overflow: hidden;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
     transition: transform 0.25s ease;
     border: 1px solid #E0CBB5;
+    overflow: hidden;
   }
+  
   
   .map-card:hover {
     transform: scale(1.04);

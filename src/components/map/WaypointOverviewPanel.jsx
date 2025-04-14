@@ -16,7 +16,7 @@ const WaypointOverviewPanel = ({
 
   const handleCreatorClick = () => {
     if (route.creator?.alias) {
-      console.log("Navigating to:", `/user/${route.creator.alias}`);  // Debug log
+      console.log("Navigating to:", `/user/${route.creator.alias}`);
       navigate(`/user/${route.creator.alias}`);
     } else {
       console.error("Alias is missing for creator:", route.creator);
