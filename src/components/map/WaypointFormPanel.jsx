@@ -148,7 +148,7 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
         longitude: parseFloat(currentWaypoint.longitude),
         tags: Array.isArray(currentWaypoint.tags) ? currentWaypoint.tags.join(", ") : currentWaypoint.tags,
         price: parseFloat(currentWaypoint.price),
-        image_data: currentWaypoint.image_data
+        image_data: currentWaypoint.image_data || selectedWaypoint.image_data
       };
       console.log("Old waypoints:", userRoutes[0].waypoints);
       const newWaypoints = userRoutes[0].waypoints.map((wp) =>

@@ -44,7 +44,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
       console.log("Map style loaded, running drawing logic");
       clearMap();
 
-      // Check if there is a selected route in local storage
+      // Check if there is a selected route in local storage, TODO change this to use an actual prop, this is a hack
       const selectedMapId = localStorage.getItem("selectedRouteId");
       console.log("Selected map ID from local storage:", selectedMapId);
       if (selectedMapId && routes.length > 0) {
