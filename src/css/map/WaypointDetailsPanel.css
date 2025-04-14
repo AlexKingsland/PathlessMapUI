@@ -6,8 +6,7 @@
   background-color: #f5efe6;
   padding: 20px;
   box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.15);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-radius: 12px;
   z-index: 999;
   transition: transform 0.3s ease-in-out;
 }
@@ -20,15 +19,21 @@
   margin-bottom: 10px;
 }
 
-.waypoint-details-title {
-  text-align: center; /* Center the title */
+.waypoint-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #4B3621;
 }
 
 .waypoint-details-content {
-  font-size: 14px;
-  color: #5a4333; /* Subtle text color for details */
-  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 10px;
 }
+
 
 .waypoint-details-content p {
   margin: 8px 0; /* Consistent spacing between details */
@@ -38,18 +43,53 @@
   color: #8b5e3c; /* Highlight labels */
 }
 
-.waypoint-details-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #8b5e3c; /* Close button matches the theme */
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
 .waypoint-details-close-btn:hover {
   color: #5c3b28; /* Darker hover color for the close button */
+}
+
+.waypoint-details-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #61422a;
+  cursor: pointer;
+}
+
+.waypoint-details-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.waypoint-image-container {
+  flex-shrink: 0;
+}
+
+.waypoint-image {
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #8b5e3c;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+.waypoint-text {
+  flex-grow: 1;
+}
+
+.waypoint-text h3 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #4b3621;
+}
+
+.waypoint-text p {
+  margin: 6px 0;
+  font-size: 14px;
 }
