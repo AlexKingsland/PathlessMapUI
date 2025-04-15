@@ -5,7 +5,7 @@ import "../../css/map/MapboxComponent.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import WaypointFormPanel from "./WaypointFormPanel";
 
-const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex, handleSelectRoute }) => {
+const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, routes, waypointFormPanelVisible, toggleWaypointFormPanel, isCreateMode, onUpdateWaypoint, selectedWaypoint, setSelectedWaypoint, setCurrentRouteIndex, currentRouteIndex, handleHoverRoute, handleLeaveRoute, handleHoverWaypoint, handleLeaveWaypoint, mapContainerRef, map, setMap, resetHighlightedMarkers, markerRefs, waypointMarkerRefs, setIsCreateMapModalVisible, isCreateMapModalVisible, setUserRoutes, createMapWaypointIndex, setCreateMapWaypointIndex, handleSelectRoute, handleSelectWaypoint }) => {
 
   useEffect(() => {
     if (window.mapboxgl && mapContainerRef.current) {
@@ -166,6 +166,7 @@ const MapboxComponent = ({ resetToTopLevelView, toggleGlobalView, isGlobalView, 
 
       marker.getElement().addEventListener("click", () => {
         setSelectedWaypoint(waypoint);
+        handleSelectWaypoint(index);
         setCreateMapWaypointIndex(index);
       });
       markerElement.addEventListener("mouseover", () => handleHoverWaypoint(index));
