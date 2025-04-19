@@ -160,19 +160,22 @@ function App() {
   };
   
   const handleSelectWaypoint = (index) => {
-    if (exploreRoutes[currentRouteIndex]?.waypoints[index]) {
-      const waypoint = exploreRoutes[currentRouteIndex].waypoints[index];
-      
-      setSelectedWaypoint(waypoint);
-  
-      // Optionally zoom into the selected waypoint
-      if (map) {
-        map.flyTo({
-          center: [waypoint.longitude, waypoint.latitude],
-          zoom: 14,
-          essential: true,
-        });
-      }
+    let waypoint = null;
+    if (isCreateMode) {
+      waypoint = userRoutes[0].waypoints[index];
+    } else {
+      waypoint = exploreRoutes[currentRouteIndex].waypoints[index];
+    }
+    
+    setSelectedWaypoint(waypoint);
+
+    // Optionally zoom into the selected waypoint
+    if (map) {
+      map.flyTo({
+        center: [waypoint.longitude, waypoint.latitude],
+        zoom: 14,
+        essential: true,
+      });
     }
   };
   
