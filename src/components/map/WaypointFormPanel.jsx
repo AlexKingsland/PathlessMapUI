@@ -63,8 +63,8 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
     const file = e.target.files[0];
 
     if (file) {
-      if (file.size > 2048 * 2048) {
-        setImageError("File size must be less than 1MB.");
+      if (file.size > 5 * 1024 * 1024) {
+        setImageError("File size must be less than 5MB.");
         setImagePreview(null);
         return;
       }
