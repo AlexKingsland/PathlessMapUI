@@ -19,7 +19,9 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
     longitude: "",
     tags: "",
     price: "",
-    image: null
+    image: null,
+    city: "",
+    country: ""
   });
 
   const [useGoogleSearch, setUseGoogleSearch] = useState(true);
@@ -40,8 +42,9 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
         longitude: selectedWaypoint.longitude ?? "",
         tags: Array.isArray(selectedWaypoint.tags) ? selectedWaypoint.tags.join(", ") : selectedWaypoint.tags || "",
         price: selectedWaypoint.price ?? "",
-        image: null,
-        image_data: selectedWaypoint.image_data || null
+        image_data: selectedWaypoint.image_data || null,
+        city: selectedWaypoint.city || "",
+        country: selectedWaypoint.country || ""
       });
       updateImagePreview(selectedWaypoint.image_data);
       setIsPlotted(true);
@@ -97,11 +100,35 @@ const WaypointFormPanel = ({ onUpdateWaypoint, isPanelOpen, togglePanel, setSele
       geocoder.geocode({ address: value }, (results, status) => {
         if (status === "OK" && results[0]) {
           const location = results[0].geometry.location;
+          const components = results[0].address_components;
+  
+          let city = "";
+          let country = "";
+
+          console.log("Components:", components);
+  
+          components.forEach((component) => {
+            // Prioritized city-level identifiers
+            if (
+              component.types.includes("locality") ||              // Most common for cities
+              component.types.includes("administrative_area_level_2") || // County/district (fallback)
+              component.types.includes("sublocality") ||           // Neighborhood
+              component.types.includes("postal_town")              // Common in UK and some regions
+            ) {
+              if (!city) city = component.long_name;
+            }
+            if (component.types.includes("country")) {
+              country = component.long_name;
+            }
+          });
+  
           setCurrentWaypoint((prev) => ({
             ...prev,
             latitude: location.lat(),
             longitude: location.lng(),
-            title: value.split(",")[0]
+            title: value.split(",")[0],
+            city,
+            country,
           }));
         } else {
           console.error("Geocode was not successful:", status);

@@ -318,6 +318,7 @@ function App() {
             times_of_day: wp.times_of_day || null,
             duration: wp.duration || null,
             country: wp.country || null,
+            city: wp.city || null,
             image_data:
               typeof wp.image_data === "string"
                 ? wp.image_data
@@ -394,6 +395,8 @@ function App() {
             tags: waypoint.tags || [],
             price: waypoint.price || 0.0,
             times_of_day: waypoint.times_of_day || null,
+            city: waypoint.city || null,
+            country: waypoint.country || null,
           }))
         )
       );
