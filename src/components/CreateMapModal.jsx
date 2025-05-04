@@ -143,7 +143,7 @@ const CreateMapModal = ({ onClose, onCreateMode, onEditMode, mode, defaultValues
                 required
               />
             </div>
-            <div className="duration-input-group">
+            {/* <div className="duration-input-group">
               <label>Minutes:</label>
               <input
                 type="number"
@@ -153,7 +153,7 @@ const CreateMapModal = ({ onClose, onCreateMode, onEditMode, mode, defaultValues
                 onChange={(e) => handleDurationChange("minutes", parseInt(e.target.value) || 0)}
                 required
               />
-            </div>
+            </div> */}
           </div>
 
           <label className="form-label">Upload Image:</label>
